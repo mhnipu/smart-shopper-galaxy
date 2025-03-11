@@ -1,12 +1,13 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Product } from '@/lib/data';
-import { Heart, ShoppingCart } from 'lucide-react';
+import { Eye, Heart, ShoppingCart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/context/CartContext';
 import { useWishlist } from '@/context/WishlistContext';
 import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
+import { toast } from 'sonner';
 
 interface ProductCardProps {
   product: Product;
@@ -15,6 +16,7 @@ interface ProductCardProps {
 export function ProductCard({ product }: ProductCardProps) {
   const { addItem } = useCart();
   const { addItem: addToWishlist, removeItem: removeFromWishlist, isInWishlist } = useWishlist();
+  const [isHovered, setIsHovered] = useState(false);
   
   const inWishlist = isInWishlist(product.id);
 
@@ -28,6 +30,8 @@ export function ProductCard({ product }: ProductCardProps) {
       price: product.price,
       image: product.images[0]
     });
+    
+    toast.success(`${product.name} added to cart`);
   };
   
   const handleWishlistToggle = (e: React.MouseEvent) => {
@@ -36,6 +40,7 @@ export function ProductCard({ product }: ProductCardProps) {
     
     if (inWishlist) {
       removeFromWishlist(product.id);
+      toast.success(`${product.name} removed from wishlist`);
     } else {
       addToWishlist({
         id: product.id,
@@ -43,6 +48,7 @@ export function ProductCard({ product }: ProductCardProps) {
         price: product.price,
         image: product.images[0]
       });
+      toast.success(`${product.name} added to wishlist`);
     }
   };
 
@@ -50,6 +56,8 @@ export function ProductCard({ product }: ProductCardProps) {
     <Link
       to={`/product/${product.id}`}
       className="group relative flex h-full flex-col overflow-hidden rounded-xl bg-white dark:bg-gray-800 shadow-sm transition-all hover:shadow-md"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
       <div className="relative aspect-square overflow-hidden">
         <span className="absolute top-2 right-2 z-10">
@@ -68,11 +76,36 @@ export function ProductCard({ product }: ProductCardProps) {
             </span>
           </Button>
         </span>
+        
+        {/* Product Label - show if it's featured */}
+        {product.featured && (
+          <span className="absolute top-2 left-2 z-10 bg-primary text-white text-xs px-2 py-1 rounded">
+            Featured
+          </span>
+        )}
+        
         <img
           src={product.images[0]}
           alt={product.name}
           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
         />
+        
+        {/* Quick View Button */}
+        <div className={`absolute inset-0 flex items-center justify-center bg-black/30 transition-opacity ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
+          <Button 
+            variant="secondary" 
+            size="sm" 
+            className="gap-1"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              window.location.href = `/product/${product.id}`;
+            }}
+          >
+            <Eye className="h-4 w-4" />
+            Quick View
+          </Button>
+        </div>
       </div>
       <div className="flex flex-1 flex-col p-4">
         <h3 className="font-medium group-hover:text-primary transition-colors line-clamp-1">

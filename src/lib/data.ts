@@ -27,7 +27,8 @@ export const products: Product[] = [
     images: [
       "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?q=80&w=2532&auto=format&fit=crop",
       "https://images.unsplash.com/photo-1606127195782-58758e8d281a?q=80&w=2574&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1608156639585-b3a032ef9689?q=80&w=2532&auto=format&fit=crop"
+      "https://images.unsplash.com/photo-1608156639585-b3a032ef9689?q=80&w=2532&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1613040809024-b4ef7ba99bc3?q=80&w=2670&auto=format&fit=crop"
     ],
     category: "audio",
     featured: true,
@@ -46,7 +47,8 @@ export const products: Product[] = [
     images: [
       "https://images.unsplash.com/photo-1579829366248-204fe8413f31?q=80&w=2574&auto=format&fit=crop",
       "https://images.unsplash.com/photo-1473968512647-3e447244af8f?q=80&w=2670&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1527977966376-1c8408f9f108?q=80&w=2580&auto=format&fit=crop"
+      "https://images.unsplash.com/photo-1527977966376-1c8408f9f108?q=80&w=2580&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1508444845599-5c89863b1c44?q=80&w=2659&auto=format&fit=crop"
     ],
     category: "photography",
     featured: true,
@@ -65,7 +67,8 @@ export const products: Product[] = [
     images: [
       "https://images.unsplash.com/photo-1558002038-1055907df827?q=80&w=2670&auto=format&fit=crop",
       "https://images.unsplash.com/photo-1626903254829-3d3ad732e79b?q=80&w=2671&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1620641622320-a12e75405631?q=80&w=2670&auto=format&fit=crop"
+      "https://images.unsplash.com/photo-1620641622320-a12e75405631?q=80&w=2670&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1589401806207-2381455bdd20?q=80&w=2670&auto=format&fit=crop"
     ],
     category: "smart-home",
     featured: true,
@@ -84,7 +87,8 @@ export const products: Product[] = [
     images: [
       "https://images.unsplash.com/photo-1603891128711-11b4b03bb138?q=80&w=2669&auto=format&fit=crop",
       "https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?q=80&w=2329&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1585060544812-6b45742d762f?q=80&w=2662&auto=format&fit=crop"
+      "https://images.unsplash.com/photo-1585060544812-6b45742d762f?q=80&w=2662&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?q=80&w=2670&auto=format&fit=crop"
     ],
     category: "phones",
     featured: true,
@@ -104,7 +108,8 @@ export const products: Product[] = [
     images: [
       "https://images.unsplash.com/photo-1617043786394-ae759c3fa5f3?q=80&w=2670&auto=format&fit=crop",
       "https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?q=80&w=2670&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1579586337278-3befd40fd17a?q=80&w=2672&auto=format&fit=crop"
+      "https://images.unsplash.com/photo-1579586337278-3befd40fd17a?q=80&w=2672&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1434494878577-86c23bcb06b9?q=80&w=2670&auto=format&fit=crop"
     ],
     category: "wearables",
     featured: false,
@@ -124,7 +129,8 @@ export const products: Product[] = [
     images: [
       "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=2670&auto=format&fit=crop",
       "https://images.unsplash.com/photo-1520170350707-b2da59970118?q=80&w=2563&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1606141508832-8487d8208c9a?q=80&w=2574&auto=format&fit=crop"
+      "https://images.unsplash.com/photo-1606141508832-8487d8208c9a?q=80&w=2574&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1487215078519-e21cc028cb29?q=80&w=2670&auto=format&fit=crop"
     ],
     category: "audio",
     featured: false,
@@ -143,7 +149,8 @@ export const products: Product[] = [
     images: [
       "https://images.unsplash.com/photo-1593642702821-c8da6771f0c6?q=80&w=2669&auto=format&fit=crop",
       "https://images.unsplash.com/photo-1593642634524-b40b5baae6bb?q=80&w=2532&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1603302576837-37561b2e2302?q=80&w=2668&auto=format&fit=crop"
+      "https://images.unsplash.com/photo-1603302576837-37561b2e2302?q=80&w=2668&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?q=80&w=2664&auto=format&fit=crop"
     ],
     category: "computers",
     featured: false,
@@ -163,7 +170,8 @@ export const products: Product[] = [
     images: [
       "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?q=80&w=2638&auto=format&fit=crop",
       "https://images.unsplash.com/photo-1502982720700-bfff97f2ecac?q=80&w=2670&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1623282033815-40b05d96c903?q=80&w=2670&auto=format&fit=crop"
+      "https://images.unsplash.com/photo-1623282033815-40b05d96c903?q=80&w=2670&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1613098054305-9457d0a0e3b1?q=80&w=2574&auto=format&fit=crop"
     ],
     category: "photography",
     featured: false,
@@ -173,6 +181,82 @@ export const products: Product[] = [
       videoRecording: "8K Ultra HD",
       storage: "Dual SD UHS-II Card Slots",
       features: ["In-Body Image Stabilization", "Advanced Autofocus", "Weather Sealing"]
+    }
+  },
+  {
+    id: "9",
+    name: "High-Performance Gaming Console",
+    description: "Next-generation gaming with ray tracing and 4K gaming at 120 frames per second.",
+    price: 499.99,
+    images: [
+      "https://images.unsplash.com/photo-1600080972464-8e5f35f63d08?q=80&w=2532&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1607853202273-797f1c22a38e?q=80&w=2627&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?q=80&w=2670&auto=format&fit=crop"
+    ],
+    category: "gaming",
+    featured: true,
+    details: {
+      resolution: "4K/8K",
+      storage: "1TB SSD",
+      processor: "Custom AMD Zen 2",
+      features: ["Ray Tracing", "120fps Gaming", "HDR", "VRR"]
+    }
+  },
+  {
+    id: "10",
+    name: "Ultrawide Curved Gaming Monitor",
+    description: "Immersive 34-inch ultrawide curved monitor with lightning-fast refresh rate.",
+    price: 849.99,
+    images: [
+      "https://images.unsplash.com/photo-1527219525722-f9767a7f2884?q=80&w=2673&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1555375771-14b2a63968a9?q=80&w=2215&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1616588589676-62b3bd4ff6d2?q=80&w=2532&auto=format&fit=crop"
+    ],
+    category: "gaming",
+    featured: false,
+    details: {
+      display: "34-inch Ultrawide Curved",
+      resolution: "3440 x 1440 WQHD",
+      refreshRate: "175Hz",
+      responseTime: "1ms",
+      features: ["G-Sync/FreeSync", "HDR", "RGB Lighting"]
+    }
+  },
+  {
+    id: "11",
+    name: "Smart Home Hub",
+    description: "Central hub for controlling all your smart home devices with voice commands.",
+    price: 129.99,
+    images: [
+      "https://images.unsplash.com/photo-1588688592350-4544f274070d?q=80&w=2574&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1565970125716-9a7393361adb?q=80&w=2556&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1591370788571-6a4755a2bc65?q=80&w=2564&auto=format&fit=crop"
+    ],
+    category: "smart-home",
+    featured: false,
+    details: {
+      connectivity: "Wi-Fi, Bluetooth, Zigbee, Z-Wave",
+      compatibleWith: ["Alexa", "Google Assistant", "HomeKit"],
+      features: ["Voice Control", "Automation Routines", "Screen Display"]
+    }
+  },
+  {
+    id: "12",
+    name: "Portable Bluetooth Speaker",
+    description: "Powerful, waterproof speaker with 360° sound and 24-hour battery life.",
+    price: 129.99,
+    images: [
+      "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?q=80&w=2670&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1589256469067-ea99122bbdc4?q=80&w=2574&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1596332994642-a9deb82a75fd?q=80&w=2574&auto=format&fit=crop"
+    ],
+    category: "audio",
+    featured: true,
+    details: {
+      batteryLife: "24 hours",
+      waterproofRating: "IPX7",
+      connectivity: "Bluetooth 5.1",
+      features: ["Party Mode", "Voice Assistant Compatible", "USB-C Charging"]
     }
   }
 ];
@@ -207,5 +291,15 @@ export const categories: Category[] = [
     id: "computers",
     name: "Computers",
     image: "https://images.unsplash.com/photo-1593642702821-c8da6771f0c6?q=80&w=2669&auto=format&fit=crop"
+  },
+  {
+    id: "gaming",
+    name: "Gaming",
+    image: "https://images.unsplash.com/photo-1600080972464-8e5f35f63d08?q=80&w=2532&auto=format&fit=crop"
+  },
+  {
+    id: "accessories",
+    name: "Accessories",
+    image: "https://images.unsplash.com/photo-1491947153227-33d59da6c448?q=80&w=2148&auto=format&fit=crop"
   }
 ];

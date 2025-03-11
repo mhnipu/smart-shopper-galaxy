@@ -26,6 +26,20 @@ export function Hero() {
       subtitle: 'Transform your living space with intelligent home solutions',
       buttonText: 'Explore Smart Home',
       buttonLink: '/category/smart-home'
+    },
+    {
+      image: 'https://images.unsplash.com/photo-1593642702821-c8da6771f0c6?q=80&w=2669&auto=format&fit=crop&ixlib=rb-4.0.3',
+      title: 'Gaming Excellence',
+      subtitle: 'Level up your gaming experience with cutting-edge laptops and accessories',
+      buttonText: 'Explore Gaming',
+      buttonLink: '/category/gaming'
+    },
+    {
+      image: 'https://images.unsplash.com/photo-1603891128711-11b4b03bb138?q=80&w=2669&auto=format&fit=crop&ixlib=rb-4.0.3',
+      title: 'Smartphone Innovation',
+      subtitle: 'Stay connected with the latest smartphone technology and accessories',
+      buttonText: 'Shop Smartphones',
+      buttonLink: '/category/phones'
     }
   ];
 
@@ -39,7 +53,7 @@ export function Hero() {
   }, [slides.length]);
 
   return (
-    <section className="relative aspect-[16/9] md:aspect-[21/9] lg:aspect-[25/9] overflow-hidden">
+    <section className="relative aspect-[16/9] md:aspect-[21/9] lg:aspect-auto h-[300px] md:h-[400px] lg:h-[500px] overflow-hidden">
       {slides.map((slide, index) => (
         <div
           key={index}
