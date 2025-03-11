@@ -3,11 +3,12 @@ import React, { useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { X, ShoppingCart, Plus, Minus, Trash2 } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export function CartDrawer() {
   const { isCartOpen, closeCart, items, updateQuantity, removeItem, totalPrice } = useCart();
   const drawerRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -30,6 +31,11 @@ export function CartDrawer() {
       document.removeEventListener('keydown', handleEscape);
     };
   }, [isCartOpen, closeCart]);
+
+  const handleCheckout = () => {
+    closeCart();
+    navigate('/checkout');
+  };
 
   return (
     <>
@@ -149,7 +155,7 @@ export function CartDrawer() {
                   <span className="text-lg font-bold">${totalPrice.toFixed(2)}</span>
                 </div>
                 <div className="mt-4 space-y-2">
-                  <Button className="w-full">
+                  <Button className="w-full" onClick={handleCheckout}>
                     Proceed to Checkout
                   </Button>
                   <Button

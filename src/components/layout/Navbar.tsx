@@ -1,16 +1,43 @@
 
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { ThemeToggle } from '@/components/ui/ThemeToggle';
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Heart, Search, ShoppingCart, User } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import {
+  ShoppingCart,
+  User,
+  Menu,
+  X,
+  Search,
+  Heart,
+  Home,
+  Laptop,
+  Headphones,
+  Watch,
+  Smartphone,
+  Camera,
+  Gamepad2,
+  Monitor
+} from 'lucide-react';
+import { ThemeToggle } from '@/components/ui/ThemeToggle';
 import { useCart } from '@/context/CartContext';
-import { categories } from '@/lib/data';
 
 export function Navbar() {
-  const { totalItems, openCart } = useCart();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
+  const { openCart, totalItems } = useCart();
+  const location = useLocation();
+
+  const categories = [
+    { name: 'All Products', icon: <Laptop className="h-4 w-4 mr-2" />, href: '/products' },
+    { name: 'Audio', icon: <Headphones className="h-4 w-4 mr-2" />, href: '/category/audio' },
+    { name: 'Wearables', icon: <Watch className="h-4 w-4 mr-2" />, href: '/category/wearables' },
+    { name: 'Phones', icon: <Smartphone className="h-4 w-4 mr-2" />, href: '/category/phones' },
+    { name: 'Cameras', icon: <Camera className="h-4 w-4 mr-2" />, href: '/category/cameras' },
+    { name: 'Gaming', icon: <Gamepad2 className="h-4 w-4 mr-2" />, href: '/category/gaming' },
+    { name: 'Smart Home', icon: <Monitor className="h-4 w-4 mr-2" />, href: '/category/smart-home' },
+  ];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -21,151 +48,155 @@ export function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  return (
-    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-      isScrolled ? 'bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg shadow-md' : 'bg-transparent'
-    }`}>
-      <div className="container mx-auto px-4 md:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between">
-          <div className="flex items-center">
-            <Link to="/" className="text-2xl font-bold transition-transform hover:scale-105">
-              NEXUS
-            </Link>
-          </div>
+  useEffect(() => {
+    setIsMenuOpen(false);
+    setIsSearchOpen(false);
+  }, [location.pathname]);
 
-          <nav className="hidden lg:flex items-center space-x-8">
-            <Link to="/" className="text-sm font-medium hover:text-primary transition-colors">
+  return (
+    <header className={`fixed top-0 z-40 w-full ${isScrolled ? 'bg-background/90 backdrop-blur-sm shadow-sm' : 'bg-background'} transition-all duration-200`}>
+      <div className="container mx-auto px-4 py-3 flex items-center justify-between">
+        {/* Logo */}
+        <Link 
+          to="/" 
+          className="text-xl font-bold flex items-center"
+        >
+          <span className="text-primary mr-1">Tech</span>Mart
+        </Link>
+
+        {/* Desktop Navigation */}
+        <nav className="hidden md:flex space-x-1">
+          <Button variant="ghost" asChild>
+            <Link to="/" className="text-sm">
+              <Home className="h-4 w-4 mr-2" />
               Home
             </Link>
-            <div className="relative group">
-              <button className="text-sm font-medium hover:text-primary transition-colors">
-                Categories
-              </button>
-              <div className="absolute -left-48 top-6 w-[500px] invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all duration-300 pt-4">
-                <div className="bg-white dark:bg-gray-900 rounded-xl shadow-xl p-6 grid grid-cols-3 gap-4">
-                  {categories.map((category) => (
-                    <Link 
-                      key={category.id}
-                      to={`/category/${category.id}`}
-                      className="flex flex-col items-center group hover:bg-secondary rounded-lg p-2 transition-all"
-                    >
-                      <div className="w-16 h-16 rounded-lg overflow-hidden mb-2">
-                        <img 
-                          src={category.image} 
-                          alt={category.name} 
-                          className="w-full h-full object-cover group-hover:scale-110 transition-transform"
-                        />
-                      </div>
-                      <span className="text-sm font-medium">{category.name}</span>
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            </div>
-            <Link to="/products" className="text-sm font-medium hover:text-primary transition-colors">
-              All Products
+          </Button>
+          <Button variant="ghost" asChild>
+            <Link to="/products" className="text-sm">
+              <Laptop className="h-4 w-4 mr-2" />
+              Shop
             </Link>
-          </nav>
+          </Button>
+        </nav>
 
-          <div className="flex items-center space-x-3">
-            <ThemeToggle />
-            
-            <Button variant="ghost" size="icon" className="hidden md:flex">
-              <Search className="h-5 w-5" />
-              <span className="sr-only">Search</span>
-            </Button>
-            
-            <Button variant="ghost" size="icon" className="hidden md:flex relative">
-              <Heart className="h-5 w-5" />
-              <span className="sr-only">Wishlist</span>
-            </Button>
-
-            <Button variant="ghost" size="icon" className="hidden md:flex">
+        {/* Search, Cart, Profile */}
+        <div className="flex items-center space-x-1">
+          <ThemeToggle />
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className="md:flex"
+            onClick={() => setIsSearchOpen(!isSearchOpen)}
+          >
+            <Search className="h-5 w-5" />
+            <span className="sr-only">Search</span>
+          </Button>
+          <Button 
+            variant="ghost" 
+            size="icon"
+            onClick={openCart}
+            className="relative"
+          >
+            <ShoppingCart className="h-5 w-5" />
+            <span className="sr-only">Open cart</span>
+            {totalItems > 0 && (
+              <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                {totalItems}
+              </span>
+            )}
+          </Button>
+          <Button variant="ghost" size="icon" asChild>
+            <Link to="/account">
               <User className="h-5 w-5" />
               <span className="sr-only">Account</span>
-            </Button>
-            
-            <Button 
-              onClick={openCart}
-              variant="ghost" 
-              size="icon" 
-              className="relative"
-            >
-              <ShoppingCart className="h-5 w-5" />
-              {totalItems > 0 && (
-                <span className="absolute -top-1 -right-1 bg-primary text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center animate-scale-in">
-                  {totalItems}
-                </span>
-              )}
-              <span className="sr-only">Cart</span>
-            </Button>
-            
-            <div className="lg:hidden">
-              <Button 
-                variant="ghost" 
-                size="sm"
-                onClick={() => setMenuOpen(!menuOpen)}
-                className="flex flex-col items-center justify-center w-10 h-10 space-y-1.5"
-              >
-                <span 
-                  className={`block h-0.5 w-6 bg-foreground transform transition-transform ${
-                    menuOpen ? 'rotate-45 translate-y-2' : ''
-                  }`} 
-                />
-                <span 
-                  className={`block h-0.5 w-6 bg-foreground transition-opacity ${
-                    menuOpen ? 'opacity-0' : 'opacity-100'
-                  }`} 
-                />
-                <span 
-                  className={`block h-0.5 w-6 bg-foreground transform transition-transform ${
-                    menuOpen ? '-rotate-45 -translate-y-2' : ''
-                  }`} 
-                />
-              </Button>
-            </div>
-          </div>
+            </Link>
+          </Button>
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className="md:hidden"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          >
+            {isMenuOpen ? (
+              <X className="h-5 w-5" />
+            ) : (
+              <Menu className="h-5 w-5" />
+            )}
+            <span className="sr-only">Menu</span>
+          </Button>
         </div>
       </div>
-      
-      {/* Mobile menu */}
-      <div 
-        className={`lg:hidden ${
-          menuOpen 
-            ? 'max-h-[400px] opacity-100 visible' 
-            : 'max-h-0 opacity-0 invisible'
-        } transition-all duration-300 overflow-hidden bg-white dark:bg-gray-900`}
-      >
-        <div className="px-4 py-4 space-y-3">
-          <Link 
-            to="/" 
-            className="block py-2 text-base font-medium hover:text-primary"
-            onClick={() => setMenuOpen(false)}
+
+      {/* Search Bar - Shown when search is clicked */}
+      <div className={`border-t py-3 px-4 ${isSearchOpen ? 'block' : 'hidden'}`}>
+        <div className="container mx-auto flex items-center">
+          <div className="relative w-full">
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              type="search"
+              placeholder="Search for products..."
+              className="w-full pl-10"
+              autoFocus
+            />
+          </div>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="ml-2"
+            onClick={() => setIsSearchOpen(false)}
           >
-            Home
-          </Link>
-          <Link 
-            to="/products" 
-            className="block py-2 text-base font-medium hover:text-primary"
-            onClick={() => setMenuOpen(false)}
-          >
-            All Products
-          </Link>
-          <div className="py-2">
-            <h3 className="text-base font-medium mb-2">Categories</h3>
-            <div className="grid grid-cols-2 gap-2">
+            <X className="h-5 w-5" />
+            <span className="sr-only">Close search</span>
+          </Button>
+        </div>
+      </div>
+
+      {/* Mobile Menu - Shown when menu is clicked on mobile */}
+      <div className={`border-t md:hidden ${isMenuOpen ? 'block' : 'hidden'}`}>
+        <div className="container mx-auto py-4 px-4">
+          <nav className="space-y-1">
+            <Button variant="ghost" className="w-full justify-start" asChild>
+              <Link to="/">
+                <Home className="h-4 w-4 mr-2" />
+                Home
+              </Link>
+            </Button>
+            <Button variant="ghost" className="w-full justify-start" asChild>
+              <Link to="/products">
+                <Laptop className="h-4 w-4 mr-2" />
+                All Products
+              </Link>
+            </Button>
+            <div className="pt-2 mt-2 border-t">
+              <h3 className="font-medium mb-2 px-3">Categories</h3>
               {categories.map((category) => (
-                <Link 
-                  key={category.id}
-                  to={`/category/${category.id}`}
-                  className="text-sm py-1 hover:text-primary"
-                  onClick={() => setMenuOpen(false)}
+                <Button
+                  key={category.name}
+                  variant="ghost"
+                  className="w-full justify-start"
+                  asChild
                 >
-                  {category.name}
-                </Link>
+                  <Link to={category.href}>
+                    {category.icon}
+                    {category.name}
+                  </Link>
+                </Button>
               ))}
             </div>
-          </div>
+            <div className="pt-2 mt-2 border-t">
+              <Button variant="ghost" className="w-full justify-start" asChild>
+                <Link to="/account">
+                  <User className="h-4 w-4 mr-2" />
+                  My Account
+                </Link>
+              </Button>
+              <Button variant="ghost" className="w-full justify-start">
+                <Heart className="h-4 w-4 mr-2" />
+                Wishlist
+              </Button>
+            </div>
+          </nav>
         </div>
       </div>
     </header>
