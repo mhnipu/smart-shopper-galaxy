@@ -1,86 +1,102 @@
 
 import React from 'react';
-import { RadioGroup } from '@/components/ui/radio-group';
-import { Button } from '@/components/ui/button';
-import {
-  CreditCard,
-  Landmark,
-  Wallet,
-  CoinsIcon,
-  Calendar,
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
+import { 
+  CreditCard, 
+  Wallet, 
+  CoinsIcon, 
+  Banknote, 
+  CreditCardIcon,
+  Phone
 } from 'lucide-react';
 
-interface PaymentOption {
-  id: string;
-  name: string;
-  icon: React.ReactNode;
-  description: string;
-}
-
-interface PaymentMethodSelectorProps {
-  selectedMethod: string;
-  onSelect: (method: string) => void;
-}
-
-export function PaymentMethodSelector({ selectedMethod, onSelect }: PaymentMethodSelectorProps) {
-  const paymentOptions: PaymentOption[] = [
-    {
-      id: 'credit-card',
-      name: 'Credit/Debit Card',
-      icon: <CreditCard className="h-5 w-5" />,
-      description: 'Pay with Visa, Mastercard, American Express',
-    },
-    {
-      id: 'paypal',
-      name: 'PayPal',
-      icon: <Wallet className="h-5 w-5" />,
-      description: 'Fast, secure payment with PayPal',
-    },
-    {
-      id: 'bank-transfer',
-      name: 'Bank Transfer',
-      icon: <Landmark className="h-5 w-5" />,
-      description: 'Direct bank transfer (processing may take 1-2 days)',
-    },
-    {
-      id: 'crypto',
-      name: 'Cryptocurrency',
-      icon: <CoinsIcon className="h-5 w-5" />,
-      description: 'Pay with Bitcoin, Ethereum, or other cryptocurrencies',
-    },
-    {
-      id: 'bnpl',
-      name: 'Buy Now, Pay Later',
-      icon: <Calendar className="h-5 w-5" />,
-      description: 'Split your payment in 4 interest-free installments',
-    },
-  ];
-
+export function PaymentMethodSelector({ value, onChange }: { value: string, onChange: (value: string) => void }) {
   return (
-    <RadioGroup value={selectedMethod} className="space-y-3">
-      {paymentOptions.map((option) => (
-        <div key={option.id} className="flex">
-          <Button
-            variant={selectedMethod === option.id ? "default" : "outline"}
-            className={`w-full justify-start text-left h-auto py-3 px-4 ${
-              selectedMethod === option.id ? "border-primary" : ""
-            }`}
-            onClick={() => onSelect(option.id)}
-          >
-            <div className="flex gap-3 items-center">
-              <div className={`rounded-full p-1.5 ${selectedMethod === option.id ? "bg-primary-foreground text-primary" : "bg-muted"}`}>
-                {option.icon}
-              </div>
-              <div>
-                <div className="font-medium">{option.name}</div>
-                <div className="text-xs text-muted-foreground mt-0.5">
-                  {option.description}
-                </div>
-              </div>
-            </div>
-          </Button>
-        </div>
-      ))}
+    <RadioGroup value={value} onValueChange={onChange} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <RadioGroupItem value="credit_card" id="credit_card" className="peer sr-only" />
+        <Label
+          htmlFor="credit_card"
+          className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
+        >
+          <CreditCard className="mb-3 h-6 w-6" />
+          <div className="text-center">
+            <p>Credit Card</p>
+            <p className="text-xs text-muted-foreground">Pay with Visa, Mastercard</p>
+          </div>
+        </Label>
+      </div>
+      
+      <div>
+        <RadioGroupItem value="paypal" id="paypal" className="peer sr-only" />
+        <Label
+          htmlFor="paypal"
+          className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
+        >
+          <Wallet className="mb-3 h-6 w-6" />
+          <div className="text-center">
+            <p>PayPal</p>
+            <p className="text-xs text-muted-foreground">Pay with your PayPal account</p>
+          </div>
+        </Label>
+      </div>
+      
+      <div>
+        <RadioGroupItem value="cryptocurrency" id="cryptocurrency" className="peer sr-only" />
+        <Label
+          htmlFor="cryptocurrency"
+          className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
+        >
+          <CoinsIcon className="mb-3 h-6 w-6" />
+          <div className="text-center">
+            <p>Cryptocurrency</p>
+            <p className="text-xs text-muted-foreground">Pay with Bitcoin, Ethereum</p>
+          </div>
+        </Label>
+      </div>
+      
+      <div>
+        <RadioGroupItem value="cash_on_delivery" id="cash_on_delivery" className="peer sr-only" />
+        <Label
+          htmlFor="cash_on_delivery"
+          className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
+        >
+          <Banknote className="mb-3 h-6 w-6" />
+          <div className="text-center">
+            <p>Cash on Delivery</p>
+            <p className="text-xs text-muted-foreground">Pay when you receive</p>
+          </div>
+        </Label>
+      </div>
+      
+      <div>
+        <RadioGroupItem value="bkash" id="bkash" className="peer sr-only" />
+        <Label
+          htmlFor="bkash"
+          className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
+        >
+          <Phone className="mb-3 h-6 w-6" />
+          <div className="text-center">
+            <p>bKash</p>
+            <p className="text-xs text-muted-foreground">Pay with mobile banking</p>
+          </div>
+        </Label>
+      </div>
+      
+      <div>
+        <RadioGroupItem value="nagad" id="nagad" className="peer sr-only" />
+        <Label
+          htmlFor="nagad"
+          className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
+        >
+          <Phone className="mb-3 h-6 w-6" />
+          <div className="text-center">
+            <p>Nagad</p>
+            <p className="text-xs text-muted-foreground">Pay with mobile banking</p>
+          </div>
+        </Label>
+      </div>
     </RadioGroup>
   );
 }

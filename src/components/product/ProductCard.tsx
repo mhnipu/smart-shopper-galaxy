@@ -4,7 +4,9 @@ import { Product } from '@/lib/data';
 import { Heart, ShoppingCart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/context/CartContext';
+import { useWishlist } from '@/context/WishlistContext';
 import { Link } from 'react-router-dom';
+import { cn } from '@/lib/utils';
 
 interface ProductCardProps {
   product: Product;
@@ -12,6 +14,9 @@ interface ProductCardProps {
 
 export function ProductCard({ product }: ProductCardProps) {
   const { addItem } = useCart();
+  const { addItem: addToWishlist, removeItem: removeFromWishlist, isInWishlist } = useWishlist();
+  
+  const inWishlist = isInWishlist(product.id);
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -24,6 +29,22 @@ export function ProductCard({ product }: ProductCardProps) {
       image: product.images[0]
     });
   };
+  
+  const handleWishlistToggle = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (inWishlist) {
+      removeFromWishlist(product.id);
+    } else {
+      addToWishlist({
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        image: product.images[0]
+      });
+    }
+  };
 
   return (
     <Link
@@ -32,9 +53,19 @@ export function ProductCard({ product }: ProductCardProps) {
     >
       <div className="relative aspect-square overflow-hidden">
         <span className="absolute top-2 right-2 z-10">
-          <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm">
-            <Heart className="h-4 w-4 transition-colors group-hover:text-destructive" />
-            <span className="sr-only">Add to wishlist</span>
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className={cn(
+              "h-8 w-8 rounded-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm",
+              inWishlist && "text-destructive"
+            )}
+            onClick={handleWishlistToggle}
+          >
+            <Heart className={cn("h-4 w-4 transition-colors", inWishlist ? "fill-current" : "")} />
+            <span className="sr-only">
+              {inWishlist ? "Remove from wishlist" : "Add to wishlist"}
+            </span>
           </Button>
         </span>
         <img
