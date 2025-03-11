@@ -6,7 +6,7 @@ import {
   CreditCard,
   Landmark,
   Wallet,
-  CoinIcon,
+  CoinsIcon,
   Calendar,
 } from 'lucide-react';
 
@@ -45,7 +45,7 @@ export function PaymentMethodSelector({ selectedMethod, onSelect }: PaymentMetho
     {
       id: 'crypto',
       name: 'Cryptocurrency',
-      icon: <CoinIcon className="h-5 w-5" />,
+      icon: <CoinsIcon className="h-5 w-5" />,
       description: 'Pay with Bitcoin, Ethereum, or other cryptocurrencies',
     },
     {

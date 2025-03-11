@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -21,12 +20,14 @@ import {
 } from 'lucide-react';
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
 import { useCart } from '@/context/CartContext';
+import { useWishlist } from '@/context/WishlistContext';
 
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const { openCart, totalItems } = useCart();
+  const { totalItems: wishlistItems } = useWishlist();
   const location = useLocation();
 
   const categories = [
@@ -56,7 +57,6 @@ export function Navbar() {
   return (
     <header className={`fixed top-0 z-40 w-full ${isScrolled ? 'bg-background/90 backdrop-blur-sm shadow-sm' : 'bg-background'} transition-all duration-200`}>
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
-        {/* Logo */}
         <Link 
           to="/" 
           className="text-xl font-bold flex items-center"
@@ -64,7 +64,6 @@ export function Navbar() {
           <span className="text-primary mr-1">Tech</span>Mart
         </Link>
 
-        {/* Desktop Navigation */}
         <nav className="hidden md:flex space-x-1">
           <Button variant="ghost" asChild>
             <Link to="/" className="text-sm">
@@ -80,7 +79,6 @@ export function Navbar() {
           </Button>
         </nav>
 
-        {/* Search, Cart, Profile */}
         <div className="flex items-center space-x-1">
           <ThemeToggle />
           <Button 
@@ -91,6 +89,22 @@ export function Navbar() {
           >
             <Search className="h-5 w-5" />
             <span className="sr-only">Search</span>
+          </Button>
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            asChild
+            className="relative"
+          >
+            <Link to="/wishlist">
+              <Heart className="h-5 w-5" />
+              <span className="sr-only">Wishlist</span>
+              {wishlistItems > 0 && (
+                <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                  {wishlistItems}
+                </span>
+              )}
+            </Link>
           </Button>
           <Button 
             variant="ghost" 
@@ -128,7 +142,6 @@ export function Navbar() {
         </div>
       </div>
 
-      {/* Search Bar - Shown when search is clicked */}
       <div className={`border-t py-3 px-4 ${isSearchOpen ? 'block' : 'hidden'}`}>
         <div className="container mx-auto flex items-center">
           <div className="relative w-full">
@@ -152,7 +165,6 @@ export function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Menu - Shown when menu is clicked on mobile */}
       <div className={`border-t md:hidden ${isMenuOpen ? 'block' : 'hidden'}`}>
         <div className="container mx-auto py-4 px-4">
           <nav className="space-y-1">
@@ -191,9 +203,11 @@ export function Navbar() {
                   My Account
                 </Link>
               </Button>
-              <Button variant="ghost" className="w-full justify-start">
-                <Heart className="h-4 w-4 mr-2" />
-                Wishlist
+              <Button variant="ghost" className="w-full justify-start" asChild>
+                <Link to="/wishlist">
+                  <Heart className="h-4 w-4 mr-2" />
+                  Wishlist
+                </Link>
               </Button>
             </div>
           </nav>

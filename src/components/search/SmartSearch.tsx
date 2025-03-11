@@ -1,11 +1,10 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { ImageSearch } from './ImageSearch';
-import { Mic, MicOff, Search, Loader2 } from 'lucide-react';
+import { Mic, MicOff, Search, Loader2, X } from 'lucide-react';
 import { products, categories } from '@/lib/data';
 import { useNavigate } from 'react-router-dom';
 
@@ -32,7 +31,6 @@ export function SmartSearch() {
   const searchRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   
-  // Handle clicks outside of search to close popover
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
@@ -46,7 +44,6 @@ export function SmartSearch() {
     };
   }, []);
   
-  // Search logic
   useEffect(() => {
     if (!query) {
       setResults([]);
@@ -55,11 +52,9 @@ export function SmartSearch() {
     
     setIsLoading(true);
     
-    // Simulate API delay
     const timeoutId = setTimeout(() => {
       const lowerQuery = query.toLowerCase();
       
-      // Search products
       const matchedProducts = products
         .filter(product => 
           product.name.toLowerCase().includes(lowerQuery) ||
@@ -73,7 +68,6 @@ export function SmartSearch() {
           image: product.images[0],
         }));
       
-      // Search categories
       const matchedCategories = categories
         .filter(category => 
           category.name.toLowerCase().includes(lowerQuery)
@@ -84,7 +78,6 @@ export function SmartSearch() {
           name: category.name,
         }));
       
-      // Suggested searches based on query
       const matchedSuggestions = suggestedSearches
         .filter(suggestion => 
           suggestion.toLowerCase().includes(lowerQuery)
@@ -134,7 +127,6 @@ export function SmartSearch() {
     
     setIsListening(true);
     
-    // Simulate voice recognition
     setTimeout(() => {
       const fakeSpeechRecognition = "smart watches";
       setQuery(fakeSpeechRecognition);
