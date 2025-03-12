@@ -98,7 +98,7 @@ export function Navbar() {
       </div>
       
       {/* Main Navbar */}
-      <div className="bg-white dark:bg-gray-900 py-3">
+      <div className="bg-white dark:bg-gray-900 py-4">
         <div className="container mx-auto px-4 flex items-center justify-between">
           <div className="flex items-center">
             <Link 
@@ -187,14 +187,14 @@ export function Navbar() {
       </div>
 
       {/* Category Navigation */}
-      <div className="bg-secondary hidden md:block border-t border-b border-border">
+      <div className="bg-secondary hidden md:block border-t border-b border-border py-1">
         <div className="container mx-auto">
           <nav className="flex">
             {categories.map((category, index) => (
               <Link 
                 key={category.name}
                 to={category.href}
-                className="py-2 px-4 text-sm hover:bg-primary hover:text-white transition-colors flex items-center"
+                className="py-3 px-4 text-sm hover:bg-primary hover:text-white transition-colors flex items-center"
               >
                 {category.icon}
                 {category.name}

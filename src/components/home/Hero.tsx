@@ -52,7 +52,7 @@ export function Hero() {
   }, [slides.length]);
 
   return (
-    <section className="relative h-[350px] md:h-[450px] lg:h-[500px] overflow-hidden mt-[126px] md:mt-[132px]">
+    <section className="relative h-[400px] md:h-[500px] lg:h-[600px] overflow-hidden mt-[140px] md:mt-[146px]">
       {slides.map((slide, index) => (
         <div
           key={index}
@@ -66,7 +66,7 @@ export function Hero() {
             alt={slide.title}
             className="h-full w-full object-cover"
           />
-          <div className="absolute inset-0 z-20 flex items-center justify-start text-left px-8 md:px-16 pt-16">
+          <div className="absolute inset-0 z-20 flex items-center justify-start text-left px-8 md:px-16">
             <div className="max-w-lg">
               <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
                 {slide.title}
@@ -84,7 +84,7 @@ export function Hero() {
         </div>
       ))}
       
-      <div className="absolute bottom-6 left-0 right-0 z-20 flex justify-center space-x-3">
+      <div className="absolute bottom-8 left-0 right-0 z-20 flex justify-center space-x-3">
         {slides.map((_, index) => (
           <button
             key={index}
