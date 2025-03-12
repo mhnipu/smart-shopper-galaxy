@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export function Hero() {
@@ -53,7 +52,7 @@ export function Hero() {
   }, [slides.length]);
 
   return (
-    <section className="relative aspect-[16/9] md:aspect-[21/9] lg:aspect-auto h-[300px] md:h-[400px] lg:h-[500px] overflow-hidden">
+    <section className="relative h-[300px] md:h-[400px] lg:h-[450px] overflow-hidden">
       {slides.map((slide, index) => (
         <div
           key={index}
@@ -67,24 +66,17 @@ export function Hero() {
             alt={slide.title}
             className="h-full w-full object-cover"
           />
-          <div className="absolute inset-0 z-20 flex items-center justify-center text-center px-4">
-            <div className="max-w-3xl mx-auto">
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 animate-fade-in">
+          <div className="absolute inset-0 z-20 flex items-center justify-start text-left px-8 md:px-16">
+            <div className="max-w-lg">
+              <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-3">
                 {slide.title}
               </h1>
-              <p className="text-lg md:text-xl text-white/90 mb-6 max-w-2xl mx-auto animate-fade-in"
-                style={{ animationDelay: "0.2s" }}
-              >
+              <p className="text-sm md:text-base text-white/90 mb-4 max-w-md">
                 {slide.subtitle}
               </p>
               <Link to={slide.buttonLink}>
-                <Button 
-                  size="lg" 
-                  className="group animate-fade-in"
-                  style={{ animationDelay: "0.4s" }}
-                >
+                <Button size="sm" variant="default">
                   {slide.buttonText}
-                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </Button>
               </Link>
             </div>

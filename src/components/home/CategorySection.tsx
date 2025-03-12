@@ -2,7 +2,7 @@
 import React from 'react';
 import { Category } from '@/lib/data';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { ArrowRight } from 'lucide-react';
 
 interface CategorySectionProps {
   categories: Category[];
@@ -10,38 +10,38 @@ interface CategorySectionProps {
 
 export function CategorySection({ categories }: CategorySectionProps) {
   return (
-    <section className="py-20 px-4 md:px-6 lg:px-8 bg-gray-50 dark:bg-gray-900">
+    <section className="py-12 px-4 md:px-6 lg:px-8 bg-white dark:bg-gray-900">
       <div className="container mx-auto">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
-            Browse By Category
+        <div className="flex justify-between items-center mb-8">
+          <h2 className="text-2xl md:text-3xl font-bold">
+            Browse Categories
           </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            Explore our wide range of products organized by category to find exactly what you need.
-          </p>
+          <Link 
+            to="/products" 
+            className="text-primary flex items-center hover:underline"
+          >
+            View All Categories
+            <ArrowRight className="ml-2 h-4 w-4" />
+          </Link>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
-          {categories.map((category, index) => (
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+          {categories.map((category) => (
             <Link
               key={category.id}
               to={`/category/${category.id}`}
-              className="group relative flex flex-col items-center overflow-hidden rounded-xl bg-white dark:bg-gray-800 p-6 shadow-md transition-all hover:shadow-lg animate-fade-in hover:-translate-y-1"
-              style={{ animationDelay: `${index * 0.1}s` }}
+              className="group flex flex-col items-center border border-gray-200 dark:border-gray-700 rounded-md p-4 transition-all hover:shadow-md"
             >
-              <div className="aspect-square w-full overflow-hidden rounded-lg mb-4">
+              <div className="mb-3 h-24 w-24 flex items-center justify-center">
                 <img
                   src={category.image}
                   alt={category.name}
-                  className="h-full w-full object-cover transition-transform group-hover:scale-110 duration-700"
+                  className="max-h-full max-w-full object-contain"
                 />
               </div>
-              <h3 className="text-lg font-medium text-center group-hover:text-primary transition-colors">
+              <h3 className="text-sm font-medium text-center group-hover:text-primary">
                 {category.name}
               </h3>
-              <span className="mt-2 inline-block text-xs text-muted-foreground px-2 py-1 rounded-full bg-secondary">
-                View Products
-              </span>
             </Link>
           ))}
         </div>
