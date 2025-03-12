@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -60,12 +59,10 @@ export function Navbar() {
 
   const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Get the search input value
     const formData = new FormData(e.currentTarget);
     const searchTerm = formData.get('searchQuery') as string;
     
     if (searchTerm?.trim()) {
-      // Navigate to products page with search query
       window.location.href = `/products?search=${encodeURIComponent(searchTerm.trim())}`;
     }
     
@@ -74,9 +71,8 @@ export function Navbar() {
 
   return (
     <header className={`fixed top-0 z-40 w-full ${isScrolled ? 'bg-background/90 backdrop-blur-sm shadow-sm' : 'bg-background'} transition-all duration-200`}>
-      {/* Top Bar */}
       <div className="bg-primary text-white py-1 text-xs">
-        <div className="container mx-auto px-4 flex justify-between items-center group hover:bg-primary-600 transition-colors duration-200 hover:py-2">
+        <div className="container mx-auto px-4 flex justify-between items-center">
           <div className="flex items-center space-x-4">
             <div className="flex items-center">
               <PhoneCall className="h-3 w-3 mr-1" />
@@ -97,7 +93,6 @@ export function Navbar() {
         </div>
       </div>
       
-      {/* Main Navbar */}
       <div className="bg-white dark:bg-gray-900 py-4">
         <div className="container mx-auto px-4 flex items-center justify-between">
           <div className="flex items-center">
@@ -186,7 +181,6 @@ export function Navbar() {
         </div>
       </div>
 
-      {/* Category Navigation */}
       <div className="bg-secondary hidden md:block border-t border-b border-border py-1">
         <div className="container mx-auto">
           <nav className="flex">
@@ -204,7 +198,6 @@ export function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Search Bar */}
       <div className={`border-t py-3 px-4 ${isSearchOpen ? 'block' : 'hidden'}`}>
         <div className="container mx-auto">
           <form onSubmit={handleSearchSubmit} className="relative w-full">
@@ -230,7 +223,6 @@ export function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Menu */}
       <div className={`border-t md:hidden ${isMenuOpen ? 'block' : 'hidden'}`}>
         <div className="container mx-auto py-4 px-4">
           <nav className="space-y-1">
