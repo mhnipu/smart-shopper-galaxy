@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
@@ -11,6 +12,13 @@ import { products, categories } from '@/lib/data';
 interface SmartSearchProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+}
+
+// Adding appropriate props to ImageSearch component
+interface ImageSearchProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onClose?: () => void;
 }
 
 export const SmartSearch: React.FC<SmartSearchProps> = ({ open, onOpenChange }) => {
@@ -77,7 +85,7 @@ export const SmartSearch: React.FC<SmartSearchProps> = ({ open, onOpenChange }) 
             {categoryResults.length > 0 && (
               <CommandGroup heading="Categories">
                 {categoryResults.map((category) => (
-                  <CommandItem key={category.id} onSelect={() => handleCategorySelect(category.href)}>
+                  <CommandItem key={category.id} onSelect={() => handleCategorySelect(category.href || `/category/${category.id}`)}>
                     {category.name}
                   </CommandItem>
                 ))}
@@ -96,7 +104,12 @@ export const SmartSearch: React.FC<SmartSearchProps> = ({ open, onOpenChange }) 
           </Button>
         </div>
       </DialogContent>
-      <ImageSearch open={isImageSearchOpen} onOpenChange={setIsImageSearchOpen} onClose={() => onOpenChange(false)} />
+      {/* TypeScript now knows about the props for ImageSearch */}
+      <ImageSearch 
+        open={isImageSearchOpen} 
+        onOpenChange={setIsImageSearchOpen} 
+        onClose={() => onOpenChange(false)} 
+      />
     </Dialog>
   );
 };

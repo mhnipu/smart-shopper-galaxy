@@ -16,6 +16,7 @@ export interface Category {
   id: string;
   name: string;
   image: string;
+  href?: string; // Add optional href property
 }
 
 export const products: Product[] = [
@@ -265,41 +266,49 @@ export const categories: Category[] = [
   {
     id: "audio",
     name: "Audio",
-    image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=2670&auto=format&fit=crop"
+    image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=2670&auto=format&fit=crop",
+    href: "/category/audio"
   },
   {
     id: "photography",
     name: "Photography",
-    image: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?q=80&w=2638&auto=format&fit=crop"
+    image: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?q=80&w=2638&auto=format&fit=crop",
+    href: "/category/photography"
   },
   {
     id: "smart-home",
     name: "Smart Home",
-    image: "https://images.unsplash.com/photo-1558002038-1055907df827?q=80&w=2670&auto=format&fit=crop"
+    image: "https://images.unsplash.com/photo-1558002038-1055907df827?q=80&w=2670&auto=format&fit=crop",
+    href: "/category/smart-home"
   },
   {
     id: "phones",
     name: "Phones",
-    image: "https://images.unsplash.com/photo-1603891128711-11b4b03bb138?q=80&w=2669&auto=format&fit=crop"
+    image: "https://images.unsplash.com/photo-1603891128711-11b4b03bb138?q=80&w=2669&auto=format&fit=crop",
+    href: "/category/phones"
   },
   {
     id: "wearables",
     name: "Wearables",
-    image: "https://images.unsplash.com/photo-1617043786394-ae759c3fa5f3?q=80&w=2670&auto=format&fit=crop"
+    image: "https://images.unsplash.com/photo-1617043786394-ae759c3fa5f3?q=80&w=2670&auto=format&fit=crop",
+    href: "/category/wearables"
   },
   {
     id: "computers",
     name: "Computers",
-    image: "https://images.unsplash.com/photo-1593642702821-c8da6771f0c6?q=80&w=2669&auto=format&fit=crop"
+    image: "https://images.unsplash.com/photo-1593642702821-c8da6771f0c6?q=80&w=2669&auto=format&fit=crop",
+    href: "/category/computers"
   },
   {
     id: "gaming",
     name: "Gaming",
-    image: "https://images.unsplash.com/photo-1600080972464-8e5f35f63d08?q=80&w=2532&auto=format&fit=crop"
+    image: "https://images.unsplash.com/photo-1600080972464-8e5f35f63d08?q=80&w=2532&auto=format&fit=crop",
+    href: "/category/gaming"
   },
   {
     id: "accessories",
     name: "Accessories",
-    image: "https://images.unsplash.com/photo-1491947153227-33d59da6c448?q=80&w=2148&auto=format&fit=crop"
+    image: "https://images.unsplash.com/photo-1491947153227-33d59da6c448?q=80&w=2148&auto=format&fit=crop",
+    href: "/category/accessories"
   }
 ];
