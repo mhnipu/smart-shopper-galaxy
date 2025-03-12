@@ -76,7 +76,7 @@ export function Navbar() {
     <header className={`fixed top-0 z-40 w-full ${isScrolled ? 'bg-background/90 backdrop-blur-sm shadow-sm' : 'bg-background'} transition-all duration-200`}>
       {/* Top Bar */}
       <div className="bg-primary text-white py-1 text-xs">
-        <div className="container mx-auto px-4 flex justify-between items-center">
+        <div className="container mx-auto px-4 flex justify-between items-center group hover:bg-primary-600 transition-colors duration-200 hover:py-2">
           <div className="flex items-center space-x-4">
             <div className="flex items-center">
               <PhoneCall className="h-3 w-3 mr-1" />
