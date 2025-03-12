@@ -52,7 +52,7 @@ export function Hero() {
   }, [slides.length]);
 
   return (
-    <section className="relative h-[300px] md:h-[400px] lg:h-[450px] overflow-hidden">
+    <section className="relative h-[350px] md:h-[450px] lg:h-[500px] overflow-hidden mt-[126px] md:mt-[132px]">
       {slides.map((slide, index) => (
         <div
           key={index}
@@ -66,16 +66,16 @@ export function Hero() {
             alt={slide.title}
             className="h-full w-full object-cover"
           />
-          <div className="absolute inset-0 z-20 flex items-center justify-start text-left px-8 md:px-16">
+          <div className="absolute inset-0 z-20 flex items-center justify-start text-left px-8 md:px-16 pt-16">
             <div className="max-w-lg">
-              <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-3">
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
                 {slide.title}
               </h1>
-              <p className="text-sm md:text-base text-white/90 mb-4 max-w-md">
+              <p className="text-sm md:text-base text-white/90 mb-6 max-w-md">
                 {slide.subtitle}
               </p>
               <Link to={slide.buttonLink}>
-                <Button size="sm" variant="default">
+                <Button size="lg" variant="default">
                   {slide.buttonText}
                 </Button>
               </Link>
@@ -84,12 +84,12 @@ export function Hero() {
         </div>
       ))}
       
-      <div className="absolute bottom-4 left-0 right-0 z-20 flex justify-center space-x-2">
+      <div className="absolute bottom-6 left-0 right-0 z-20 flex justify-center space-x-3">
         {slides.map((_, index) => (
           <button
             key={index}
             onClick={() => setCurrentSlide(index)}
-            className={`w-2.5 h-2.5 rounded-full transition-all ${
+            className={`w-3 h-3 rounded-full transition-all ${
               currentSlide === index ? 'bg-white scale-125' : 'bg-white/50'
             }`}
             aria-label={`Go to slide ${index + 1}`}
