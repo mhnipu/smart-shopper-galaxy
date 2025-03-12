@@ -14,8 +14,13 @@ import {
 import { Camera, ImageIcon, Loader2, Search, Upload, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
-export function ImageSearch() {
-  const [isOpen, setIsOpen] = useState(false);
+interface ImageSearchProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onClose?: () => void;
+}
+
+export function ImageSearch({ open, onOpenChange, onClose }: ImageSearchProps) {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [dragActive, setDragActive] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
@@ -65,7 +70,8 @@ export function ImageSearch() {
     // Simulate image search with a delay
     setTimeout(() => {
       setIsSearching(false);
-      setIsOpen(false);
+      if (onClose) onClose();
+      else onOpenChange(false);
       
       // Redirect to products with a search query
       navigate('/products?imageSearch=true');
@@ -83,12 +89,7 @@ export function ImageSearch() {
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
-        <Button variant="outline" size="icon">
-          <Camera className="h-5 w-5" />
-        </Button>
-      </DialogTrigger>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Search by Image</DialogTitle>
@@ -159,7 +160,7 @@ export function ImageSearch() {
         <DialogFooter className="sm:justify-end">
           <Button 
             variant="ghost" 
-            onClick={() => setIsOpen(false)}
+            onClick={() => onOpenChange(false)}
           >
             Cancel
           </Button>

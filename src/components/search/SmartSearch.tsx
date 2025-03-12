@@ -14,13 +14,6 @@ interface SmartSearchProps {
   onOpenChange: (open: boolean) => void;
 }
 
-// Adding appropriate props to ImageSearch component
-interface ImageSearchProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  onClose?: () => void;
-}
-
 export const SmartSearch: React.FC<SmartSearchProps> = ({ open, onOpenChange }) => {
   const [value, setValue] = useState("");
   const [isImageSearchOpen, setIsImageSearchOpen] = useState(false);
@@ -104,7 +97,6 @@ export const SmartSearch: React.FC<SmartSearchProps> = ({ open, onOpenChange }) 
           </Button>
         </div>
       </DialogContent>
-      {/* TypeScript now knows about the props for ImageSearch */}
       <ImageSearch 
         open={isImageSearchOpen} 
         onOpenChange={setIsImageSearchOpen} 
