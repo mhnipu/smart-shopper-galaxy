@@ -52,7 +52,7 @@ export function Hero() {
   }, [slides.length]);
 
   return (
-    <section className="relative h-[400px] md:h-[500px] lg:h-[600px] overflow-hidden mt-[160px] md:mt-[166px]">
+    <section className="relative h-[400px] md:h-[500px] lg:h-[600px] overflow-hidden mt-[180px] md:mt-[190px]">
       {slides.map((slide, index) => (
         <div
           key={index}
