@@ -6,6 +6,7 @@ import { ShoppingCart, User, Menu, X, Search, Heart, Home, Laptop, Headphones, W
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
 import { useCart } from '@/context/CartContext';
 import { useWishlist } from '@/context/WishlistContext';
+
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -18,6 +19,7 @@ export function Navbar() {
     totalItems: wishlistItems
   } = useWishlist();
   const location = useLocation();
+  
   const categories = [{
     name: 'All Products',
     icon: <Laptop className="h-4 w-4 mr-2" />,
@@ -47,6 +49,7 @@ export function Navbar() {
     icon: <Monitor className="h-4 w-4 mr-2" />,
     href: '/category/smart-home'
   }];
+
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
@@ -54,10 +57,12 @@ export function Navbar() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
   useEffect(() => {
     setIsMenuOpen(false);
     setIsSearchOpen(false);
   }, [location.pathname]);
+
   const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
@@ -67,6 +72,7 @@ export function Navbar() {
     }
     setIsSearchOpen(false);
   };
+
   return <header className={`fixed top-0 z-40 w-full ${isScrolled ? 'bg-background/90 backdrop-blur-sm shadow-sm' : 'bg-background'} transition-all duration-200`}>
       <div className="text-white py-1 text-xs bg-gray-950">
         <div className="container mx-auto flex justify-between items-center px-[16px] rounded-sm">
@@ -97,21 +103,29 @@ export function Navbar() {
               <span className="text-primary mr-1">Tech</span>Mart
             </Link>
             
-            <div className="hidden lg:block relative w-full max-w-md">
-              <form onSubmit={handleSearchSubmit} className="flex">
-                <Input type="search" name="searchQuery" placeholder="Search for products..." className="w-full pr-10" />
-                <Button type="submit" variant="default" className="absolute right-0 h-full rounded-l-none">
-                  <Search className="h-4 w-4" />
-                </Button>
-              </form>
-            </div>
+            {!isSearchOpen && (
+              <div className="hidden lg:block relative w-full max-w-md">
+                <form onSubmit={handleSearchSubmit} className="flex">
+                  <Input type="search" name="searchQuery" placeholder="Search for products..." className="w-full pr-10" />
+                  <Button type="submit" variant="default" className="absolute right-0 h-full rounded-l-none">
+                    <Search className="h-4 w-4" />
+                  </Button>
+                </form>
+              </div>
+            )}
           </div>
 
-          <div className="flex items-center space-x-1">
-            <Button variant="ghost" size="icon" className="lg:hidden" onClick={() => setIsSearchOpen(!isSearchOpen)}>
-              <Search className="h-5 w-5" />
-              <span className="sr-only">Search</span>
+          <div className="flex items-center space-x-2">
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className={`${isSearchOpen ? 'bg-primary/10 text-primary' : ''}`}
+              onClick={() => setIsSearchOpen(!isSearchOpen)}
+            >
+              {isSearchOpen ? <X className="h-5 w-5" /> : <Search className="h-5 w-5" />}
+              <span className="sr-only">{isSearchOpen ? 'Close search' : 'Search'}</span>
             </Button>
+            
             <Button variant="ghost" size="icon" asChild className="relative">
               <Link to="/wishlist">
                 <Heart className="h-5 w-5" />
@@ -142,6 +156,30 @@ export function Navbar() {
         </div>
       </div>
 
+      {isSearchOpen && (
+        <div className="py-3 px-4 bg-background border-t">
+          <div className="container mx-auto">
+            <form onSubmit={handleSearchSubmit} className="relative w-full">
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input 
+                type="search" 
+                name="searchQuery" 
+                placeholder="Search for products..." 
+                className="w-full pl-10 pr-10" 
+                autoFocus 
+              />
+              <Button 
+                type="submit" 
+                variant="default" 
+                className="absolute right-0 top-0 h-full rounded-l-none"
+              >
+                Search
+              </Button>
+            </form>
+          </div>
+        </div>
+      )}
+
       <div className="bg-secondary hidden md:block border-t border-b border-border py-1">
         <div className="container mx-auto">
           <nav className="flex">
@@ -150,19 +188,6 @@ export function Navbar() {
                 {category.name}
               </Link>)}
           </nav>
-        </div>
-      </div>
-
-      <div className={`border-t py-3 px-4 ${isSearchOpen ? 'block' : 'hidden'}`}>
-        <div className="container mx-auto">
-          <form onSubmit={handleSearchSubmit} className="relative w-full">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-            <Input type="search" name="searchQuery" placeholder="Search for products..." className="w-full pl-10" autoFocus />
-            <Button type="button" variant="ghost" size="icon" className="absolute right-0 top-0 h-full" onClick={() => setIsSearchOpen(false)}>
-              <X className="h-5 w-5" />
-              <span className="sr-only">Close search</span>
-            </Button>
-          </form>
         </div>
       </div>
 
