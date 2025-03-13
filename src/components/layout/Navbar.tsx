@@ -22,7 +22,6 @@ export function Navbar() {
   } = useWishlist();
   const location = useLocation();
   
-  // Import categories from NavbarCategories to reuse in mobile menu
   const categories = [{
     name: 'All Products',
     icon: <Laptop className="h-4 w-4 mr-2" />,
@@ -94,15 +93,15 @@ export function Navbar() {
             )}
           </div>
 
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-3">
             <Button 
               variant="ghost" 
               size="icon" 
               className={`${isSearchOpen ? 'bg-primary/10 text-primary' : ''}`}
               onClick={() => setIsSearchOpen(!isSearchOpen)}
+              aria-label={isSearchOpen ? 'Close search' : 'Search'}
             >
               {isSearchOpen ? <X className="h-5 w-5" /> : <Search className="h-5 w-5" />}
-              <span className="sr-only">{isSearchOpen ? 'Close search' : 'Search'}</span>
             </Button>
             
             <Button variant="ghost" size="icon" asChild className="relative">
@@ -140,7 +139,7 @@ export function Navbar() {
       </div>
 
       {isSearchOpen && (
-        <div className="py-3 px-4 bg-background border-t">
+        <div className="py-4 px-4 bg-background border-t border-b">
           <div className="container mx-auto">
             <NavbarSearchForm 
               isFullWidth={true} 
