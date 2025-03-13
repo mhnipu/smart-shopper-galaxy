@@ -69,7 +69,7 @@ export function Navbar() {
   };
   return <header className={`fixed top-0 z-40 w-full ${isScrolled ? 'bg-background/90 backdrop-blur-sm shadow-sm' : 'bg-background'} transition-all duration-200`}>
       <div className="bg-primary text-white py-1 text-xs">
-        <div className="container mx-auto flex justify-between items-center rounded-none bg-slate-950 px-0">
+        <div className="container mx-auto flex justify-between items-center px-[16px] rounded-sm">
           <div className="flex items-center space-x-4">
             <div className="flex items-center">
               <PhoneCall className="h-3 w-3 mr-1" />
