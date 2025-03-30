@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Heart, Loader2, Share, ShoppingCart } from 'lucide-react';
@@ -31,9 +30,8 @@ export function ProductActions({ product, showAddToCart = true, quantity = 1 }: 
         id: product.id,
         name: product.name,
         price: product.price,
-        image: product.images[0],
-        quantity: quantity
-      });
+        image: product.images[0]
+      }, quantity);
       
       setIsAdding(false);
       

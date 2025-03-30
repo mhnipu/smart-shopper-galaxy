@@ -12,7 +12,7 @@ export interface CartItem {
 
 interface CartContextType {
   items: CartItem[];
-  addItem: (item: Omit<CartItem, 'quantity'>) => void;
+  addItem: (item: Omit<CartItem, 'quantity'>, quantity?: number) => void;
   removeItem: (id: string) => void;
   updateQuantity: (id: string, quantity: number) => void;
   clearCart: () => void;
@@ -45,7 +45,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const totalItems = items.reduce((total, item) => total + item.quantity, 0);
   const totalPrice = items.reduce((total, item) => total + (item.price * item.quantity), 0);
 
-  const addItem = (product: Omit<CartItem, 'quantity'>) => {
+  const addItem = (product: Omit<CartItem, 'quantity'>, quantity: number = 1) => {
     setItems(prevItems => {
       const existingItem = prevItems.find(item => item.id === product.id);
       
@@ -53,12 +53,12 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         toast.success(`${product.name} quantity updated`);
         return prevItems.map(item => 
           item.id === product.id 
-            ? { ...item, quantity: item.quantity + 1 } 
+            ? { ...item, quantity: item.quantity + quantity } 
             : item
         );
       } else {
         toast.success(`${product.name} added to cart`);
-        return [...prevItems, { ...product, quantity: 1 }];
+        return [...prevItems, { ...product, quantity }];
       }
     });
     
