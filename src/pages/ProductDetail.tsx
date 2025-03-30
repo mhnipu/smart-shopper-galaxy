@@ -88,7 +88,7 @@ const ProductDetail = () => {
       <Navbar />
       <CartDrawer />
       
-      <main className="flex-1 pt-16">
+      <main className="flex-1 pt-24">
         {/* Breadcrumbs */}
         <ProductBreadcrumbs productName={product.name} category={product.category} />
 
