@@ -7,6 +7,7 @@ export interface Product {
   images: string[];
   category: string;
   featured: boolean;
+  reviews?: number; // Add optional reviews property
   details: {
     [key: string]: string | string[];
   };
