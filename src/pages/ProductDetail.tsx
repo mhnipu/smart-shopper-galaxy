@@ -12,6 +12,7 @@ import { ProductInfo } from '@/components/product/ProductInfo';
 import { ProductSpecifications } from '@/components/product/ProductSpecifications';
 import { RelatedProducts } from '@/components/product/RelatedProducts';
 import { ProductBreadcrumbs } from '@/components/product/ProductBreadcrumbs';
+import { ProductReviews } from '@/components/product/ProductReviews';
 
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -22,6 +23,26 @@ const ProductDetail = () => {
   const relatedProducts = product 
     ? products.filter(p => p.category === product.category && p.id !== product.id).slice(0, 4)
     : [];
+
+  // Sample reviews data
+  const sampleReviews = [
+    {
+      id: '1',
+      name: 'John Smith',
+      email: 'john@example.com',
+      rating: 5,
+      comment: 'This product exceeded my expectations. The quality is outstanding and it works perfectly!',
+      date: '2023-10-15'
+    },
+    {
+      id: '2',
+      name: 'Emily Johnson',
+      email: 'emily@example.com',
+      rating: 4,
+      comment: 'Great product overall. The only minor issue is that the battery life is a bit shorter than advertised.',
+      date: '2023-09-28'
+    }
+  ];
 
   useEffect(() => {
     // Simulate loading
@@ -83,6 +104,13 @@ const ProductDetail = () => {
           
           {/* Product Specifications */}
           <ProductSpecifications details={product.details} />
+          
+          {/* Product Reviews */}
+          <ProductReviews 
+            productId={product.id} 
+            productName={product.name}
+            initialReviews={sampleReviews}
+          />
             
           {/* Related Products */}
           <RelatedProducts products={relatedProducts} />
