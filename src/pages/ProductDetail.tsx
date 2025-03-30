@@ -57,7 +57,7 @@ const ProductDetail = () => {
     return (
       <div className="flex min-h-screen flex-col">
         <Navbar />
-        <main className="flex flex-1 items-center justify-center pt-16">
+        <main className="flex flex-1 items-center justify-center pt-32">
           <Loader2 className="h-12 w-12 animate-spin text-primary" />
         </main>
         <Footer />
@@ -69,7 +69,7 @@ const ProductDetail = () => {
     return (
       <div className="flex min-h-screen flex-col">
         <Navbar />
-        <main className="flex flex-1 flex-col items-center justify-center pt-16 px-4">
+        <main className="flex flex-1 flex-col items-center justify-center pt-32 px-4">
           <h1 className="text-3xl font-bold mb-4">Product Not Found</h1>
           <p className="text-muted-foreground mb-6">
             The product you're looking for doesn't exist or has been removed.
@@ -88,12 +88,12 @@ const ProductDetail = () => {
       <Navbar />
       <CartDrawer />
       
-      <main className="flex-1 pt-24">
+      <main className="flex-1 pt-32">
         {/* Breadcrumbs */}
         <ProductBreadcrumbs productName={product.name} category={product.category} />
 
         {/* Product Details Content */}
-        <div className="container mx-auto">
+        <div className="container mx-auto mt-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 py-8 px-4 md:px-6">
             {/* Product Images */}
             <ProductImageGallery images={product.images} productName={product.name} />
