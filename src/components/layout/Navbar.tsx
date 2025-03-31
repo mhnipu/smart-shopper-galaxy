@@ -1,5 +1,6 @@
+
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ShoppingCart, User, Menu, X, Search, Heart, Laptop, Headphones, Watch, Smartphone, Camera, Gamepad2, Monitor } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
@@ -8,10 +9,18 @@ import { NavbarTopBar } from './NavbarTopBar';
 import { NavbarCategories } from './NavbarCategories';
 import { NavbarMobileMenu } from './NavbarMobileMenu';
 import { NavbarSearchForm } from './NavbarSearchForm';
+import { SmartSearch } from '@/components/search/SmartSearch';
+import { 
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isSmartSearchOpen, setIsSmartSearchOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const {
     openCart,
@@ -21,6 +30,7 @@ export function Navbar() {
     totalItems: wishlistItems
   } = useWishlist();
   const location = useLocation();
+  const navigate = useNavigate();
   
   const categories = [{
     name: 'All Products',
@@ -70,9 +80,14 @@ export function Navbar() {
     const formData = new FormData(e.currentTarget);
     const searchTerm = formData.get('searchQuery') as string;
     if (searchTerm?.trim()) {
-      window.location.href = `/products?search=${encodeURIComponent(searchTerm.trim())}`;
+      navigate(`/products?search=${encodeURIComponent(searchTerm.trim())}`);
+      setIsSearchOpen(false);
     }
+  };
+
+  const handleAdvancedSearch = () => {
     setIsSearchOpen(false);
+    setIsSmartSearchOpen(true);
   };
 
   return (
@@ -94,42 +109,75 @@ export function Navbar() {
           </div>
 
           <div className="flex items-center space-x-3">
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              className={`${isSearchOpen ? 'bg-primary/10 text-primary' : ''}`}
-              onClick={() => setIsSearchOpen(!isSearchOpen)}
-              aria-label={isSearchOpen ? 'Close search' : 'Search'}
-            >
-              {isSearchOpen ? <X className="h-5 w-5" /> : <Search className="h-5 w-5" />}
-            </Button>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className={`${isSearchOpen ? 'bg-primary/10 text-primary' : ''}`}
+                    onClick={() => setIsSearchOpen(!isSearchOpen)}
+                    aria-label={isSearchOpen ? 'Close search' : 'Search'}
+                  >
+                    {isSearchOpen ? <X className="h-5 w-5" /> : <Search className="h-5 w-5" />}
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  {isSearchOpen ? 'Close search' : 'Search products'}
+                </TooltipContent>
+              </Tooltip>
+              
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button variant="ghost" size="icon" asChild className="relative">
+                    <Link to="/wishlist">
+                      <Heart className="h-5 w-5" />
+                      <span className="sr-only">Wishlist</span>
+                      {wishlistItems > 0 && (
+                        <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                          {wishlistItems}
+                        </span>
+                      )}
+                    </Link>
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  Wishlist
+                </TooltipContent>
+              </Tooltip>
+              
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button variant="ghost" size="icon" onClick={openCart} className="relative">
+                    <ShoppingCart className="h-5 w-5" />
+                    <span className="sr-only">Open cart</span>
+                    {totalItems > 0 && (
+                      <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                        {totalItems}
+                      </span>
+                    )}
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  Shopping cart
+                </TooltipContent>
+              </Tooltip>
+              
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button variant="ghost" size="icon" asChild>
+                    <Link to="/account">
+                      <User className="h-5 w-5" />
+                      <span className="sr-only">Account</span>
+                    </Link>
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  My account
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
             
-            <Button variant="ghost" size="icon" asChild className="relative">
-              <Link to="/wishlist">
-                <Heart className="h-5 w-5" />
-                <span className="sr-only">Wishlist</span>
-                {wishlistItems > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                    {wishlistItems}
-                  </span>
-                )}
-              </Link>
-            </Button>
-            <Button variant="ghost" size="icon" onClick={openCart} className="relative">
-              <ShoppingCart className="h-5 w-5" />
-              <span className="sr-only">Open cart</span>
-              {totalItems > 0 && (
-                <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                  {totalItems}
-                </span>
-              )}
-            </Button>
-            <Button variant="ghost" size="icon" asChild>
-              <Link to="/account">
-                <User className="h-5 w-5" />
-                <span className="sr-only">Account</span>
-              </Link>
-            </Button>
             <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setIsMenuOpen(!isMenuOpen)}>
               {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
               <span className="sr-only">Menu</span>
@@ -141,17 +189,26 @@ export function Navbar() {
       {isSearchOpen && (
         <div className="py-4 px-4 bg-background border-t border-b">
           <div className="container mx-auto">
-            <NavbarSearchForm 
-              isFullWidth={true} 
-              autoFocus={true} 
-              onSubmit={handleSearchSubmit} 
-            />
+            <div className="flex flex-col space-y-3">
+              <NavbarSearchForm 
+                isFullWidth={true} 
+                autoFocus={true} 
+                onSubmit={handleSearchSubmit} 
+              />
+              <div className="flex justify-end">
+                <Button variant="link" size="sm" onClick={handleAdvancedSearch}>
+                  Advanced Search
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
       )}
 
       <NavbarCategories />
       <NavbarMobileMenu isOpen={isMenuOpen} categories={categories} />
+      
+      <SmartSearch open={isSmartSearchOpen} onOpenChange={setIsSmartSearchOpen} />
     </header>
   );
 }

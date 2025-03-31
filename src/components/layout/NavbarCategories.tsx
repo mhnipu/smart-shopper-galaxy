@@ -1,9 +1,17 @@
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Laptop, Headphones, Watch, Smartphone, Camera, Gamepad2, Monitor } from 'lucide-react';
+import { 
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export function NavbarCategories() {
+  const location = useLocation();
+  
   const categories = [{
     name: 'All Products',
     icon: <Laptop className="h-4 w-4 mr-2" />,
@@ -37,17 +45,30 @@ export function NavbarCategories() {
   return (
     <div className="bg-secondary hidden md:block border-t border-b border-border py-1">
       <div className="container mx-auto">
-        <nav className="flex">
-          {categories.map((category, index) => (
-            <Link 
-              key={category.name} 
-              to={category.href} 
-              className="py-3 px-4 text-sm hover:bg-primary hover:text-white transition-colors flex items-center"
-            >
-              {category.icon}
-              {category.name}
-            </Link>
-          ))}
+        <nav className="flex overflow-x-auto">
+          <TooltipProvider>
+            {categories.map((category) => (
+              <Tooltip key={category.name}>
+                <TooltipTrigger asChild>
+                  <Link 
+                    to={category.href} 
+                    className={`py-3 px-4 text-sm transition-colors flex items-center whitespace-nowrap ${
+                      location.pathname === category.href || 
+                      (category.href.includes('/category/') && location.pathname.includes(category.href)) 
+                        ? 'bg-primary text-white' 
+                        : 'hover:bg-primary/10 hover:text-primary'
+                    }`}
+                  >
+                    {category.icon}
+                    {category.name}
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent side="bottom">
+                  Browse {category.name}
+                </TooltipContent>
+              </Tooltip>
+            ))}
+          </TooltipProvider>
         </nav>
       </div>
     </div>

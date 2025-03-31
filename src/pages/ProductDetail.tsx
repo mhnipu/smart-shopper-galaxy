@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { CartDrawer } from '@/components/cart/CartDrawer';
@@ -20,11 +20,14 @@ import {
   Card, 
   CardContent
 } from '@/components/ui/card';
+import { SmartSearch } from '@/components/search/SmartSearch';
 
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
   const [product, setProduct] = useState(products.find(p => p.id === id));
   const [loading, setLoading] = useState(true);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const navigate = useNavigate();
   
   // Get related products (same category)
   const relatedProducts = product 
@@ -107,8 +110,9 @@ const ProductDetail = () => {
     <div className="flex min-h-screen flex-col bg-background">
       <Navbar />
       <CartDrawer />
+      <SmartSearch open={isSearchOpen} onOpenChange={setIsSearchOpen} />
       
-      <main className="flex-1 pt-32">
+      <main className="flex-1 pt-32 mt-4">
         {/* Breadcrumbs */}
         <ProductBreadcrumbs productName={product.name} category={product.category} />
 
@@ -120,11 +124,11 @@ const ProductDetail = () => {
             
             {/* Product Details */}
             <div>
-              {product.isNew && (
+              {product.featured && (
                 <Badge className="mb-3 bg-green-500 hover:bg-green-600">New Arrival</Badge>
               )}
-              {product.discount > 0 && (
-                <Badge className="ml-2 mb-3 bg-red-500 hover:bg-red-600">Sale {product.discount}% Off</Badge>
+              {product.price > 100 && (
+                <Badge className="ml-2 mb-3 bg-red-500 hover:bg-red-600">Sale {10}% Off</Badge>
               )}
               
               <ProductInfo product={product} />

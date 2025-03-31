@@ -1,5 +1,6 @@
 
-import React from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -7,7 +8,7 @@ import { Button } from '@/components/ui/button';
 interface NavbarSearchFormProps {
   isFullWidth?: boolean;
   autoFocus?: boolean;
-  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+  onSubmit?: (e: React.FormEvent<HTMLFormElement>) => void;
 }
 
 export function NavbarSearchForm({ 
@@ -15,9 +16,25 @@ export function NavbarSearchForm({
   autoFocus = false,
   onSubmit 
 }: NavbarSearchFormProps) {
+  const [searchQuery, setSearchQuery] = useState('');
+  const navigate = useNavigate();
+  
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    
+    if (onSubmit) {
+      onSubmit(e);
+      return;
+    }
+    
+    if (searchQuery.trim()) {
+      navigate(`/products?search=${encodeURIComponent(searchQuery.trim())}`);
+    }
+  };
+
   return (
     <form 
-      onSubmit={onSubmit} 
+      onSubmit={handleSubmit} 
       className={`relative flex items-center ${isFullWidth ? 'w-full' : 'w-full'}`}
     >
       {isFullWidth && (
@@ -29,6 +46,8 @@ export function NavbarSearchForm({
         placeholder="Search for products..." 
         className={`${isFullWidth ? 'pl-10 pr-24 h-11' : 'pr-10'} border-primary/20 focus-visible:ring-primary/30`}
         autoFocus={autoFocus}
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
       />
       <Button 
         type="submit" 
