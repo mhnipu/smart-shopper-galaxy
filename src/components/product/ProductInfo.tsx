@@ -185,10 +185,12 @@ export function ProductInfo({ product }: ProductInfoProps) {
       <div className="border rounded-lg p-4 space-y-3">
         <h3 className="font-medium">Product Features</h3>
         <ul className="space-y-1 text-sm">
-          {product.details && product.details.map((feature, index) => (
-            <li key={index} className="flex items-start gap-2">
+          {product.details && Object.entries(product.details).map(([key, value]) => (
+            <li key={key} className="flex items-start gap-2">
               <Check className="h-4 w-4 mt-0.5 text-primary" />
-              <span>{feature.value}</span>
+              <span>
+                {Array.isArray(value) ? value.join(', ') : String(value)}
+              </span>
             </li>
           ))}
         </ul>
