@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Laptop, Headphones, Watch, Smartphone, Camera, Gamepad2, Monitor } from 'lucide-react';
 import { 
   Tooltip,
@@ -11,6 +11,7 @@ import {
 
 export function NavbarCategories() {
   const location = useLocation();
+  const navigate = useNavigate();
   
   const categories = [{
     name: 'All Products',
@@ -41,6 +42,11 @@ export function NavbarCategories() {
     icon: <Monitor className="h-4 w-4 mr-2" />,
     href: '/category/smart-home'
   }];
+  
+  const handleCategoryClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    navigate(href);
+  };
 
   return (
     <div className="bg-secondary hidden md:block border-t border-b border-border py-1">
@@ -52,6 +58,7 @@ export function NavbarCategories() {
                 <TooltipTrigger asChild>
                   <Link 
                     to={category.href} 
+                    onClick={(e) => handleCategoryClick(e, category.href)}
                     className={`py-3 px-4 text-sm transition-colors flex items-center whitespace-nowrap ${
                       location.pathname === category.href || 
                       (category.href.includes('/category/') && location.pathname.includes(category.href)) 
@@ -63,7 +70,7 @@ export function NavbarCategories() {
                     {category.name}
                   </Link>
                 </TooltipTrigger>
-                <TooltipContent side="bottom">
+                <TooltipContent side="bottom" sideOffset={10}>
                   Browse {category.name}
                 </TooltipContent>
               </Tooltip>

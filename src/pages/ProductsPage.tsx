@@ -1,5 +1,6 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { CartDrawer } from '@/components/cart/CartDrawer';
@@ -10,14 +11,44 @@ import { SlidersHorizontal, Disc, Loader2 } from 'lucide-react';
 
 const ProductsPage = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState<string>('');
   const [sortOption, setSortOption] = useState<string>('featured');
   const [isFilterVisible, setIsFilterVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
 
-  // Filter products by selected category
-  const filteredProducts = selectedCategory 
-    ? products.filter(product => product.category === selectedCategory)
-    : products;
+  // Parse URL params on page load
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const search = params.get('search');
+    
+    if (search) {
+      setSearchQuery(search);
+    }
+    
+    // Get category from path if on a category page
+    const pathParts = location.pathname.split('/');
+    if (pathParts[1] === 'category' && pathParts[2]) {
+      setSelectedCategory(pathParts[2]);
+    } else {
+      setSelectedCategory(null);
+    }
+  }, [location]);
+
+  // Filter products by selected category and search query
+  const filteredProducts = products.filter(product => {
+    const matchesCategory = selectedCategory 
+      ? product.category === selectedCategory
+      : true;
+      
+    const matchesSearch = searchQuery
+      ? product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        product.description.toLowerCase().includes(searchQuery.toLowerCase())
+      : true;
+      
+    return matchesCategory && matchesSearch;
+  });
 
   // Sort products based on selected option
   const sortedProducts = [...filteredProducts].sort((a, b) => {
@@ -39,6 +70,13 @@ const ProductsPage = () => {
     setIsLoading(true);
     setSelectedCategory(categoryId);
     
+    // Update URL without triggering a reload
+    if (categoryId) {
+      navigate(`/category/${categoryId}${searchQuery ? `?search=${searchQuery}` : ''}`, { replace: true });
+    } else {
+      navigate(`/products${searchQuery ? `?search=${searchQuery}` : ''}`, { replace: true });
+    }
+    
     // Simulate loading delay
     setTimeout(() => setIsLoading(false), 500);
   };
@@ -56,13 +94,23 @@ const ProductsPage = () => {
       <Navbar />
       <CartDrawer />
       
-      <main className="flex-1 pt-16">
+      <main className="flex-1 pt-32">
         {/* Page Header */}
-        <div className="bg-muted py-16 px-4 md:px-6 lg:px-8">
+        <div className="bg-muted py-12 px-4 md:px-6 lg:px-8">
           <div className="container mx-auto">
-            <h1 className="text-3xl md:text-4xl font-bold mb-4">All Products</h1>
+            <h1 className="text-3xl md:text-4xl font-bold mb-4">
+              {selectedCategory 
+                ? `${categories.find(c => c.id === selectedCategory)?.name || 'Category'}`
+                : searchQuery
+                  ? `Search Results: "${searchQuery}"`
+                  : 'All Products'
+              }
+            </h1>
             <p className="text-muted-foreground max-w-2xl">
-              Browse our complete collection of premium tech products and find the perfect fit for your lifestyle.
+              {searchQuery 
+                ? `Showing results for "${searchQuery}"`
+                : 'Browse our complete collection of premium tech products and find the perfect fit for your lifestyle.'
+              }
             </p>
           </div>
         </div>
@@ -189,7 +237,10 @@ const ProductsPage = () => {
                     <p className="text-muted-foreground mt-1 mb-6">
                       We couldn't find any products that match your criteria.
                     </p>
-                    <Button onClick={() => handleCategoryChange(null)}>
+                    <Button onClick={() => {
+                      setSearchQuery('');
+                      handleCategoryChange(null);
+                    }}>
                       View All Products
                     </Button>
                   </div>

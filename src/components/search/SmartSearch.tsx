@@ -35,13 +35,21 @@ export const SmartSearch: React.FC<SmartSearchProps> = ({ open, onOpenChange }) 
     onOpenChange(false);
   };
 
-  const handleCategorySelect = (categoryHref: string) => {
-    navigate(categoryHref);
+  const handleCategorySelect = (categoryId: string) => {
+    navigate(`/category/${categoryId}`);
     onOpenChange(false);
   };
 
+  const handleSearch = () => {
+    if (value.trim()) {
+      navigate(`/products?search=${encodeURIComponent(value.trim())}`);
+      onOpenChange(false);
+    }
+  };
+
   const searchResults = products.filter(product =>
-    product.name.toLowerCase().includes(value.toLowerCase())
+    product.name.toLowerCase().includes(value.toLowerCase()) ||
+    product.description.toLowerCase().includes(value.toLowerCase())
   );
 
   const categoryResults = categories.filter(category =>
@@ -55,14 +63,45 @@ export const SmartSearch: React.FC<SmartSearchProps> = ({ open, onOpenChange }) 
           <DialogTitle>Smart Search</DialogTitle>
         </DialogHeader>
         <Command>
-          <CommandInput ref={inputRef} placeholder="Type something..." value={value} onValueChange={setValue} className="px-6" />
+          <CommandInput 
+            ref={inputRef} 
+            placeholder="Type something..." 
+            value={value} 
+            onValueChange={setValue} 
+            className="px-6"
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                handleSearch();
+              }
+            }}
+          />
           <CommandList>
-            <CommandEmpty>No results found.</CommandEmpty>
+            <CommandEmpty>
+              <div className="py-6 text-center">
+                <p>No results found.</p>
+                <Button 
+                  variant="link" 
+                  className="mt-2"
+                  onClick={handleSearch}
+                >
+                  Search for "{value}"
+                </Button>
+              </div>
+            </CommandEmpty>
             {searchResults.length > 0 && (
               <CommandGroup heading="Products">
                 {searchResults.slice(0, 5).map((product) => (
                   <CommandItem key={product.id} onSelect={() => handleProductSelect(product.id)}>
-                    {product.name}
+                    <div className="flex items-center">
+                      <div className="w-8 h-8 rounded overflow-hidden mr-2">
+                        <img 
+                          src={product.thumbnail} 
+                          alt={product.name} 
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      {product.name}
+                    </div>
                   </CommandItem>
                 ))}
                 {searchResults.length > 5 && (
@@ -70,7 +109,7 @@ export const SmartSearch: React.FC<SmartSearchProps> = ({ open, onOpenChange }) 
                     navigate(`/products?search=${value}`);
                     onOpenChange(false);
                   }} className="justify-center">
-                    <Badge variant="secondary">See all products</Badge>
+                    <Badge variant="secondary">See all {searchResults.length} products</Badge>
                   </CommandItem>
                 )}
               </CommandGroup>
@@ -78,7 +117,7 @@ export const SmartSearch: React.FC<SmartSearchProps> = ({ open, onOpenChange }) 
             {categoryResults.length > 0 && (
               <CommandGroup heading="Categories">
                 {categoryResults.map((category) => (
-                  <CommandItem key={category.id} onSelect={() => handleCategorySelect(category.href || `/category/${category.id}`)}>
+                  <CommandItem key={category.id} onSelect={() => handleCategorySelect(category.id)}>
                     {category.name}
                   </CommandItem>
                 ))}

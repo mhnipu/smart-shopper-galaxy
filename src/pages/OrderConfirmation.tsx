@@ -22,7 +22,7 @@ const OrderConfirmation = () => {
     <div className="flex min-h-screen flex-col">
       <Navbar />
       
-      <main className="flex-1 pt-16">
+      <main className="flex-1 pt-32">
         <div className="py-12 px-4 md:px-6 lg:px-8">
           <div className="container mx-auto max-w-3xl text-center">
             <div className="flex flex-col items-center justify-center mb-8">
@@ -35,7 +35,7 @@ const OrderConfirmation = () => {
               </p>
             </div>
             
-            <div className="bg-white dark:bg-gray-800 rounded-lg border p-6 mb-8 text-left">
+            <div className="bg-white dark:bg-gray-800 rounded-lg border p-6 mb-8 text-left shadow-sm">
               <div className="flex justify-between items-center mb-6">
                 <div>
                   <h2 className="text-xl font-semibold">Order #{orderData.orderId}</h2>

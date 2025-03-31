@@ -75,10 +75,8 @@ export function Navbar() {
     setIsSearchOpen(false);
   }, [location.pathname]);
 
-  const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>, searchTerm: string) => {
     e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    const searchTerm = formData.get('searchQuery') as string;
     if (searchTerm?.trim()) {
       navigate(`/products?search=${encodeURIComponent(searchTerm.trim())}`);
       setIsSearchOpen(false);
@@ -88,6 +86,12 @@ export function Navbar() {
   const handleAdvancedSearch = () => {
     setIsSearchOpen(false);
     setIsSmartSearchOpen(true);
+  };
+
+  // Show categories on all pages except specific pages
+  const shouldShowCategories = () => {
+    const excludedPaths = ['/checkout', '/order-confirmation'];
+    return !excludedPaths.includes(location.pathname);
   };
 
   return (
@@ -122,7 +126,7 @@ export function Navbar() {
                     {isSearchOpen ? <X className="h-5 w-5" /> : <Search className="h-5 w-5" />}
                   </Button>
                 </TooltipTrigger>
-                <TooltipContent>
+                <TooltipContent sideOffset={10}>
                   {isSearchOpen ? 'Close search' : 'Search products'}
                 </TooltipContent>
               </Tooltip>
@@ -141,7 +145,7 @@ export function Navbar() {
                     </Link>
                   </Button>
                 </TooltipTrigger>
-                <TooltipContent>
+                <TooltipContent sideOffset={10}>
                   Wishlist
                 </TooltipContent>
               </Tooltip>
@@ -158,7 +162,7 @@ export function Navbar() {
                     )}
                   </Button>
                 </TooltipTrigger>
-                <TooltipContent>
+                <TooltipContent sideOffset={10}>
                   Shopping cart
                 </TooltipContent>
               </Tooltip>
@@ -172,7 +176,7 @@ export function Navbar() {
                     </Link>
                   </Button>
                 </TooltipTrigger>
-                <TooltipContent>
+                <TooltipContent sideOffset={10}>
                   My account
                 </TooltipContent>
               </Tooltip>
@@ -205,7 +209,7 @@ export function Navbar() {
         </div>
       )}
 
-      <NavbarCategories />
+      {shouldShowCategories() && <NavbarCategories />}
       <NavbarMobileMenu isOpen={isMenuOpen} categories={categories} />
       
       <SmartSearch open={isSmartSearchOpen} onOpenChange={setIsSmartSearchOpen} />

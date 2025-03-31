@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 interface NavbarSearchFormProps {
   isFullWidth?: boolean;
   autoFocus?: boolean;
-  onSubmit?: (e: React.FormEvent<HTMLFormElement>) => void;
+  onSubmit?: (e: React.FormEvent<HTMLFormElement>, searchQuery: string) => void;
 }
 
 export function NavbarSearchForm({ 
@@ -23,7 +23,7 @@ export function NavbarSearchForm({
     e.preventDefault();
     
     if (onSubmit) {
-      onSubmit(e);
+      onSubmit(e, searchQuery);
       return;
     }
     
