@@ -1,9 +1,12 @@
 
 import React, { useState } from 'react';
-import { Star } from 'lucide-react';
+import { Check, Star } from 'lucide-react';
 import { Product } from '@/lib/data';
 import { ProductActions } from '@/components/product/ProductActions';
 import { ProductOption, QuantitySelector } from '@/components/product/ProductOptions';
+import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
+import { Progress } from '@/components/ui/progress';
 
 interface ProductInfoProps {
   product: Product;
@@ -14,11 +17,20 @@ export function ProductInfo({ product }: ProductInfoProps) {
   const [selectedColorIndex, setSelectedColorIndex] = useState(0);
   const [selectedStorageIndex, setSelectedStorageIndex] = useState(0);
   
+  // Calculate old price if discount exists
+  const oldPrice = product.discount > 0 
+    ? product.price + (product.price * product.discount / 100) 
+    : null;
+  
+  // Stock status
+  const inStock = product.stock > 0;
+  const stockLevel = product.stock > 10 ? 'high' : product.stock > 5 ? 'medium' : 'low';
+  
   return (
     <div className="animate-fade-in space-y-6">
-      <h1 className="text-2xl md:text-3xl font-bold">{product.name}</h1>
+      <h1 className="text-3xl md:text-4xl font-bold tracking-tight">{product.name}</h1>
       
-      <div className="flex items-center">
+      <div className="flex items-center space-x-4">
         <div className="flex">
           {[...Array(5)].map((_, i) => (
             <Star 
@@ -27,19 +39,71 @@ export function ProductInfo({ product }: ProductInfoProps) {
             />
           ))}
         </div>
-        <span className="ml-2 text-sm text-muted-foreground">4.0 ({product.reviews || 24} reviews)</span>
+        <span className="text-sm text-muted-foreground">4.0 ({product.reviews || 24} reviews)</span>
+        <Separator orientation="vertical" className="h-4" />
+        <span className="text-sm text-muted-foreground">
+          {product.sold || 125} sold
+        </span>
       </div>
       
-      <div>
-        <span className="text-2xl font-bold">${product.price.toFixed(2)}</span>
-        <span className="ml-2 text-sm text-muted-foreground">
+      <div className="flex items-baseline space-x-3">
+        <span className="text-3xl font-bold">${product.price.toFixed(2)}</span>
+        {oldPrice && (
+          <span className="text-xl text-muted-foreground line-through">
+            ${oldPrice.toFixed(2)}
+          </span>
+        )}
+        <span className="text-sm text-muted-foreground">
           Includes all taxes
         </span>
       </div>
       
-      <p className="text-base">{product.description}</p>
+      <Separator />
+      
+      <div className="text-base leading-relaxed">{product.description}</div>
+      
+      <div className="flex items-center space-x-2">
+        <div className={`w-3 h-3 rounded-full ${
+          stockLevel === 'high' ? 'bg-green-500' : 
+          stockLevel === 'medium' ? 'bg-yellow-500' : 
+          'bg-red-500'
+        }`}></div>
+        <span className="font-medium">
+          {inStock ? 
+            (stockLevel === 'low' ? 'Low Stock' : 'In Stock') : 
+            'Out of Stock'}
+        </span>
+        {inStock && product.stock <= 10 && (
+          <span className="text-sm text-muted-foreground">
+            ({product.stock} left)
+          </span>
+        )}
+      </div>
+      
+      {inStock && stockLevel === 'low' && (
+        <div className="space-y-1">
+          <div className="flex justify-between text-sm">
+            <span>Selling fast! {product.stock} left</span>
+            <span>{product.stock}/20</span>
+          </div>
+          <Progress value={product.stock * 5} className="h-2" />
+        </div>
+      )}
       
       <div className="space-y-6 pt-4">
+        {/* Features Highlights */}
+        <div className="space-y-2">
+          <h3 className="text-sm font-medium">Key Features</h3>
+          <ul className="space-y-1">
+            {(product.features || ['Premium Build Quality', 'Advanced Technology', 'Energy Efficient']).map((feature, index) => (
+              <li key={index} className="flex items-start space-x-2">
+                <Check className="h-5 w-5 text-green-500 shrink-0 mt-0.5" />
+                <span className="text-sm">{feature}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+        
         {/* Color Options (if available) */}
         {product.details.color && Array.isArray(product.details.color) && (
           <ProductOption 

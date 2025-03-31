@@ -6,13 +6,20 @@ import { Footer } from '@/components/layout/Footer';
 import { CartDrawer } from '@/components/cart/CartDrawer';
 import { products } from '@/lib/data';
 import { Button } from '@/components/ui/button';
-import { Loader2 } from 'lucide-react';
+import { Clock, Loader2, ShieldCheck, Truck } from 'lucide-react';
 import { ProductImageGallery } from '@/components/product/ProductImageGallery';
 import { ProductInfo } from '@/components/product/ProductInfo';
 import { ProductSpecifications } from '@/components/product/ProductSpecifications';
 import { RelatedProducts } from '@/components/product/RelatedProducts';
 import { ProductBreadcrumbs } from '@/components/product/ProductBreadcrumbs';
 import { ProductReviews } from '@/components/product/ProductReviews';
+import { ProductTabs } from '@/components/product/ProductTabs';
+import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
+import { 
+  Card, 
+  CardContent
+} from '@/components/ui/card';
 
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -41,6 +48,14 @@ const ProductDetail = () => {
       rating: 4,
       comment: 'Great product overall. The only minor issue is that the battery life is a bit shorter than advertised.',
       date: '2023-09-28'
+    },
+    {
+      id: '3',
+      name: 'Robert Miller',
+      email: 'robert@example.com',
+      rating: 5,
+      comment: 'Excellent build quality and performs exactly as described. Would definitely recommend!',
+      date: '2023-11-05'
     }
   ];
 
@@ -50,6 +65,8 @@ const ProductDetail = () => {
     setTimeout(() => {
       setProduct(products.find(p => p.id === id));
       setLoading(false);
+      // Scroll to top when product changes
+      window.scrollTo(0, 0);
     }, 500);
   }, [id]);
 
@@ -58,7 +75,10 @@ const ProductDetail = () => {
       <div className="flex min-h-screen flex-col">
         <Navbar />
         <main className="flex flex-1 items-center justify-center pt-32">
-          <Loader2 className="h-12 w-12 animate-spin text-primary" />
+          <div className="text-center">
+            <Loader2 className="h-12 w-12 animate-spin text-primary mx-auto mb-4" />
+            <p className="text-muted-foreground">Loading product details...</p>
+          </div>
         </main>
         <Footer />
       </div>
@@ -93,25 +113,65 @@ const ProductDetail = () => {
         <ProductBreadcrumbs productName={product.name} category={product.category} />
 
         {/* Product Details Content */}
-        <div className="container mx-auto mt-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 py-8 px-4 md:px-6">
+        <div className="container mx-auto mt-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 py-8 px-4 md:px-6 bg-white dark:bg-gray-900 rounded-lg shadow-sm">
             {/* Product Images */}
             <ProductImageGallery images={product.images} productName={product.name} />
             
             {/* Product Details */}
-            <ProductInfo product={product} />
+            <div>
+              {product.isNew && (
+                <Badge className="mb-3 bg-green-500 hover:bg-green-600">New Arrival</Badge>
+              )}
+              {product.discount > 0 && (
+                <Badge className="ml-2 mb-3 bg-red-500 hover:bg-red-600">Sale {product.discount}% Off</Badge>
+              )}
+              
+              <ProductInfo product={product} />
+              
+              {/* Product Benefits */}
+              <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
+                <Card>
+                  <CardContent className="p-4 flex items-center space-x-3">
+                    <ShieldCheck className="h-8 w-8 text-primary" />
+                    <div>
+                      <h4 className="font-medium">Warranty</h4>
+                      <p className="text-sm text-muted-foreground">1 Year Coverage</p>
+                    </div>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardContent className="p-4 flex items-center space-x-3">
+                    <Truck className="h-8 w-8 text-primary" />
+                    <div>
+                      <h4 className="font-medium">Free Shipping</h4>
+                      <p className="text-sm text-muted-foreground">Orders over $50</p>
+                    </div>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardContent className="p-4 flex items-center space-x-3">
+                    <Clock className="h-8 w-8 text-primary" />
+                    <div>
+                      <h4 className="font-medium">Easy Returns</h4>
+                      <p className="text-sm text-muted-foreground">Within 30 Days</p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
           </div>
           
-          {/* Product Specifications */}
-          <ProductSpecifications details={product.details} />
+          {/* Tabs for additional information */}
+          <div className="mt-10">
+            <ProductTabs 
+              product={product} 
+              reviews={sampleReviews}
+            />
+          </div>
           
-          {/* Product Reviews */}
-          <ProductReviews 
-            productId={product.id} 
-            productName={product.name}
-            initialReviews={sampleReviews}
-          />
-            
+          <Separator className="my-10" />
+          
           {/* Related Products */}
           <RelatedProducts products={relatedProducts} />
         </div>
