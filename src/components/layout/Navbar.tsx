@@ -1,8 +1,7 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { ShoppingCart, User, Menu, X, Search, Heart, Laptop, Headphones, Watch, Smartphone, Camera, Gamepad2, Monitor } from 'lucide-react';
+import { ShoppingCart, User, Menu, X, Search, Heart } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { useWishlist } from '@/context/WishlistContext';
 import { NavbarTopBar } from './NavbarTopBar';
@@ -88,7 +87,6 @@ export function Navbar() {
     setIsSmartSearchOpen(true);
   };
 
-  // Show categories on all pages except specific pages
   const shouldShowCategories = () => {
     const excludedPaths = ['/checkout', '/order-confirmation'];
     return !excludedPaths.includes(location.pathname);
@@ -112,80 +110,84 @@ export function Navbar() {
             )}
           </div>
 
-          <div className="flex items-center space-x-3">
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button 
-                    variant="ghost" 
-                    size="icon" 
-                    className={`${isSearchOpen ? 'bg-primary/10 text-primary' : ''}`}
-                    onClick={() => setIsSearchOpen(!isSearchOpen)}
-                    aria-label={isSearchOpen ? 'Close search' : 'Search'}
-                  >
-                    {isSearchOpen ? <X className="h-5 w-5" /> : <Search className="h-5 w-5" />}
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent sideOffset={10}>
-                  {isSearchOpen ? 'Close search' : 'Search products'}
-                </TooltipContent>
-              </Tooltip>
-              
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button variant="ghost" size="icon" asChild className="relative">
-                    <Link to="/wishlist">
-                      <Heart className="h-5 w-5" />
-                      <span className="sr-only">Wishlist</span>
-                      {wishlistItems > 0 && (
+          <div className="flex items-center">
+            {shouldShowCategories() && <NavbarCategories />}
+            
+            <div className="flex items-center space-x-3 ml-4">
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      className={`${isSearchOpen ? 'bg-primary/10 text-primary' : ''}`}
+                      onClick={() => setIsSearchOpen(!isSearchOpen)}
+                      aria-label={isSearchOpen ? 'Close search' : 'Search'}
+                    >
+                      {isSearchOpen ? <X className="h-5 w-5" /> : <Search className="h-5 w-5" />}
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent sideOffset={10}>
+                    {isSearchOpen ? 'Close search' : 'Search products'}
+                  </TooltipContent>
+                </Tooltip>
+                
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button variant="ghost" size="icon" asChild className="relative">
+                      <Link to="/wishlist">
+                        <Heart className="h-5 w-5" />
+                        <span className="sr-only">Wishlist</span>
+                        {wishlistItems > 0 && (
+                          <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                            {wishlistItems}
+                          </span>
+                        )}
+                      </Link>
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent sideOffset={10}>
+                    Wishlist
+                  </TooltipContent>
+                </Tooltip>
+                
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button variant="ghost" size="icon" onClick={openCart} className="relative">
+                      <ShoppingCart className="h-5 w-5" />
+                      <span className="sr-only">Open cart</span>
+                      {totalItems > 0 && (
                         <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                          {wishlistItems}
+                          {totalItems}
                         </span>
                       )}
-                    </Link>
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent sideOffset={10}>
-                  Wishlist
-                </TooltipContent>
-              </Tooltip>
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent sideOffset={10}>
+                    Shopping cart
+                  </TooltipContent>
+                </Tooltip>
+                
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button variant="ghost" size="icon" asChild>
+                      <Link to="/account">
+                        <User className="h-5 w-5" />
+                        <span className="sr-only">Account</span>
+                      </Link>
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent sideOffset={10}>
+                    My account
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
               
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button variant="ghost" size="icon" onClick={openCart} className="relative">
-                    <ShoppingCart className="h-5 w-5" />
-                    <span className="sr-only">Open cart</span>
-                    {totalItems > 0 && (
-                      <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                        {totalItems}
-                      </span>
-                    )}
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent sideOffset={10}>
-                  Shopping cart
-                </TooltipContent>
-              </Tooltip>
-              
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button variant="ghost" size="icon" asChild>
-                    <Link to="/account">
-                      <User className="h-5 w-5" />
-                      <span className="sr-only">Account</span>
-                    </Link>
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent sideOffset={10}>
-                  My account
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-            
-            <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-              {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-              <span className="sr-only">Menu</span>
-            </Button>
+              <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+                {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+                <span className="sr-only">Menu</span>
+              </Button>
+            </div>
           </div>
         </div>
       </div>
@@ -208,8 +210,7 @@ export function Navbar() {
           </div>
         </div>
       )}
-
-      {shouldShowCategories() && <NavbarCategories />}
+      
       <NavbarMobileMenu isOpen={isMenuOpen} categories={categories} />
       
       <SmartSearch open={isSmartSearchOpen} onOpenChange={setIsSmartSearchOpen} />

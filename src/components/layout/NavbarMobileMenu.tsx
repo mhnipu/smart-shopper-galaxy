@@ -1,8 +1,8 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Home, Laptop, User, Heart } from 'lucide-react';
+import { Home, Laptop, User, Heart, ChevronDown, ChevronUp } from 'lucide-react';
 
 interface NavbarMobileMenuProps {
   isOpen: boolean;
@@ -14,6 +14,8 @@ interface NavbarMobileMenuProps {
 }
 
 export function NavbarMobileMenu({ isOpen, categories }: NavbarMobileMenuProps) {
+  const [categoriesOpen, setCategoriesOpen] = useState(false);
+  
   if (!isOpen) return null;
 
   return (
@@ -26,23 +28,41 @@ export function NavbarMobileMenu({ isOpen, categories }: NavbarMobileMenuProps) 
               Home
             </Link>
           </Button>
+          
           <Button variant="ghost" className="w-full justify-start" asChild>
             <Link to="/products">
               <Laptop className="h-4 w-4 mr-2" />
               All Products
             </Link>
           </Button>
-          <div className="pt-2 mt-2 border-t">
-            <h3 className="font-medium mb-2 px-3">Categories</h3>
-            {categories.map(category => (
-              <Button key={category.name} variant="ghost" className="w-full justify-start" asChild>
-                <Link to={category.href}>
-                  {category.icon}
-                  {category.name}
-                </Link>
-              </Button>
-            ))}
+          
+          <div className="border-t mt-2 pt-2">
+            <Button 
+              variant="ghost" 
+              className="w-full justify-between" 
+              onClick={() => setCategoriesOpen(!categoriesOpen)}
+            >
+              <span className="flex items-center">
+                <Laptop className="h-4 w-4 mr-2" />
+                Categories
+              </span>
+              {categoriesOpen ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+            </Button>
+            
+            {categoriesOpen && (
+              <div className="pl-6 space-y-1 mt-1">
+                {categories.map(category => (
+                  <Button key={category.name} variant="ghost" className="w-full justify-start" asChild>
+                    <Link to={category.href}>
+                      {category.icon}
+                      {category.name}
+                    </Link>
+                  </Button>
+                ))}
+              </div>
+            )}
           </div>
+          
           <div className="pt-2 mt-2 border-t">
             <Button variant="ghost" className="w-full justify-start" asChild>
               <Link to="/account">

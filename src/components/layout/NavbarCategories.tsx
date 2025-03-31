@@ -1,23 +1,22 @@
 
 import React from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Laptop, Headphones, Watch, Smartphone, Camera, Gamepad2, Monitor } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Laptop, Headphones, Watch, Smartphone, Camera, Gamepad2, Monitor, ChevronDown } from 'lucide-react';
 import { 
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  navigationMenuTriggerStyle
+} from "@/components/ui/navigation-menu";
+import { cn } from '@/lib/utils';
 
 export function NavbarCategories() {
-  const location = useLocation();
   const navigate = useNavigate();
   
   const categories = [{
-    name: 'All Products',
-    icon: <Laptop className="h-4 w-4 mr-2" />,
-    href: '/products'
-  }, {
     name: 'Audio',
     icon: <Headphones className="h-4 w-4 mr-2" />,
     href: '/category/audio'
@@ -49,35 +48,46 @@ export function NavbarCategories() {
   };
 
   return (
-    <div className="bg-secondary hidden md:block border-t border-b border-border py-1">
-      <div className="container mx-auto">
-        <nav className="flex overflow-x-auto">
-          <TooltipProvider>
-            {categories.map((category) => (
-              <Tooltip key={category.name}>
-                <TooltipTrigger asChild>
-                  <Link 
-                    to={category.href} 
+    <div className="hidden md:block">
+      <NavigationMenu>
+        <NavigationMenuList>
+          <NavigationMenuItem>
+            <Link
+              to="/products"
+              className={navigationMenuTriggerStyle()}
+              onClick={(e) => handleCategoryClick(e, '/products')}
+            >
+              <Laptop className="h-4 w-4 mr-2" />
+              All Products
+            </Link>
+          </NavigationMenuItem>
+          
+          <NavigationMenuItem>
+            <NavigationMenuTrigger>
+              <span className="flex items-center">
+                Categories
+              </span>
+            </NavigationMenuTrigger>
+            <NavigationMenuContent>
+              <div className="grid grid-cols-2 gap-3 p-4 w-[400px]">
+                {categories.map((category) => (
+                  <Link
+                    key={category.name}
+                    to={category.href}
                     onClick={(e) => handleCategoryClick(e, category.href)}
-                    className={`py-3 px-4 text-sm transition-colors flex items-center whitespace-nowrap ${
-                      location.pathname === category.href || 
-                      (category.href.includes('/category/') && location.pathname.includes(category.href)) 
-                        ? 'bg-primary text-white' 
-                        : 'hover:bg-primary/10 hover:text-primary'
-                    }`}
+                    className="flex items-center p-2 rounded-md hover:bg-muted transition-colors"
                   >
-                    {category.icon}
-                    {category.name}
+                    <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary/10 mr-2">
+                      {category.icon}
+                    </div>
+                    <div className="text-sm font-medium">{category.name}</div>
                   </Link>
-                </TooltipTrigger>
-                <TooltipContent side="bottom" sideOffset={10}>
-                  Browse {category.name}
-                </TooltipContent>
-              </Tooltip>
-            ))}
-          </TooltipProvider>
-        </nav>
-      </div>
+                ))}
+              </div>
+            </NavigationMenuContent>
+          </NavigationMenuItem>
+        </NavigationMenuList>
+      </NavigationMenu>
     </div>
   );
 }
