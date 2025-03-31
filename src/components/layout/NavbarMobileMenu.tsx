@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Home, Laptop, User, Heart, ChevronDown, ChevronUp } from 'lucide-react';
+import { Home, User, Heart, ChevronDown, ChevronUp } from 'lucide-react';
 
 interface NavbarMobileMenuProps {
   isOpen: boolean;
@@ -29,13 +29,6 @@ export function NavbarMobileMenu({ isOpen, categories }: NavbarMobileMenuProps) 
             </Link>
           </Button>
           
-          <Button variant="ghost" className="w-full justify-start" asChild>
-            <Link to="/products">
-              <Laptop className="h-4 w-4 mr-2" />
-              All Products
-            </Link>
-          </Button>
-          
           <div className="border-t mt-2 pt-2">
             <Button 
               variant="ghost" 
@@ -43,7 +36,7 @@ export function NavbarMobileMenu({ isOpen, categories }: NavbarMobileMenuProps) 
               onClick={() => setCategoriesOpen(!categoriesOpen)}
             >
               <span className="flex items-center">
-                <Laptop className="h-4 w-4 mr-2" />
+                {categories[0].icon}
                 Categories
               </span>
               {categoriesOpen ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}

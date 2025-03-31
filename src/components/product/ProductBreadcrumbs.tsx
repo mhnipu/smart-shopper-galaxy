@@ -17,7 +17,7 @@ interface ProductBreadcrumbsProps {
 
 export function ProductBreadcrumbs({ productName, category }: ProductBreadcrumbsProps) {
   return (
-    <div className="bg-muted/50 py-2 px-4 md:px-6 lg:px-8">
+    <div className="bg-muted/30 py-2.5 px-4 md:px-6 lg:px-8">
       <div className="container mx-auto">
         <Breadcrumb>
           <BreadcrumbList>
@@ -42,7 +42,7 @@ export function ProductBreadcrumbs({ productName, category }: ProductBreadcrumbs
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage className="truncate max-w-[150px]">
+              <BreadcrumbPage className="truncate max-w-[200px] md:max-w-[300px]">
                 {productName}
               </BreadcrumbPage>
             </BreadcrumbItem>

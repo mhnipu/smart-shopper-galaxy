@@ -1,7 +1,22 @@
+
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { ShoppingCart, User, Menu, X, Search, Heart } from 'lucide-react';
+import { 
+  ShoppingCart, 
+  User, 
+  Menu, 
+  X, 
+  Search, 
+  Heart,
+  Laptop,
+  Headphones, 
+  Watch, 
+  Smartphone, 
+  Camera, 
+  Gamepad, 
+  Monitor 
+} from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { useWishlist } from '@/context/WishlistContext';
 import { NavbarTopBar } from './NavbarTopBar';
@@ -53,7 +68,7 @@ export function Navbar() {
     href: '/category/cameras'
   }, {
     name: 'Gaming',
-    icon: <Gamepad2 className="h-4 w-4 mr-2" />,
+    icon: <Gamepad className="h-4 w-4 mr-2" />,
     href: '/category/gaming'
   }, {
     name: 'Smart Home',
@@ -104,15 +119,13 @@ export function Navbar() {
             </Link>
             
             {!isSearchOpen && (
-              <div className="hidden lg:block relative w-full max-w-md">
-                <NavbarSearchForm onSubmit={handleSearchSubmit} />
+              <div className="hidden lg:block">
+                <NavbarCategories />
               </div>
             )}
           </div>
 
           <div className="flex items-center">
-            {shouldShowCategories() && <NavbarCategories />}
-            
             <div className="flex items-center space-x-3 ml-4">
               <TooltipProvider>
                 <Tooltip>
@@ -199,10 +212,19 @@ export function Navbar() {
               <NavbarSearchForm 
                 isFullWidth={true} 
                 autoFocus={true} 
-                onSubmit={handleSearchSubmit} 
+                onSubmit={(e, searchTerm) => {
+                  e.preventDefault();
+                  if (searchTerm?.trim()) {
+                    navigate(`/products?search=${encodeURIComponent(searchTerm.trim())}`);
+                    setIsSearchOpen(false);
+                  }
+                }} 
               />
               <div className="flex justify-end">
-                <Button variant="link" size="sm" onClick={handleAdvancedSearch}>
+                <Button variant="link" size="sm" onClick={() => {
+                  setIsSearchOpen(false);
+                  setIsSmartSearchOpen(true);
+                }}>
                   Advanced Search
                 </Button>
               </div>
