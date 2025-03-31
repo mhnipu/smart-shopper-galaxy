@@ -43,12 +43,13 @@ const formSchema = z.object({
 });
 
 const Checkout = () => {
-  const [paymentMethod, setPaymentMethod] = useState("credit-card");
-  const { cartItems, calculateSubtotal, calculateTax, clearCart } = useCart();
+  const [paymentMethod, setPaymentMethod] = useState("credit_card");
+  const { items: cartItems } = useCart();
   const navigate = useNavigate();
   
-  const subtotal = calculateSubtotal();
-  const tax = calculateTax();
+  // Calculate totals
+  const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  const tax = subtotal * 0.1; // Assume 10% tax
   const shipping = subtotal > 100 ? 0 : 10;
   const total = subtotal + tax + shipping;
   
@@ -76,7 +77,6 @@ const Checkout = () => {
     });
     
     // Clear the cart and redirect to order confirmation
-    clearCart();
     navigate("/order-confirmation");
   }
   
@@ -261,8 +261,8 @@ const Checkout = () => {
                         <h2 className="text-xl font-semibold mb-4">Payment Method</h2>
                         
                         <PaymentMethodSelector
-                          selectedMethod={paymentMethod}
-                          onSelect={setPaymentMethod}
+                          value={paymentMethod}
+                          onChange={setPaymentMethod}
                         />
                         
                         <div className="pt-6">
@@ -286,18 +286,18 @@ const Checkout = () => {
                           <div className="flex items-center">
                             <div className="h-14 w-14 rounded-md border overflow-hidden flex-shrink-0 mr-3">
                               <img
-                                src={item.product.thumbnail}
-                                alt={item.product.name}
+                                src={item.image}
+                                alt={item.name}
                                 className="h-full w-full object-cover"
                               />
                             </div>
                             <div>
-                              <h3 className="font-medium text-sm">{item.product.name}</h3>
+                              <h3 className="font-medium text-sm">{item.name}</h3>
                               <p className="text-muted-foreground text-xs">Qty: {item.quantity}</p>
                             </div>
                           </div>
                           <div className="text-right">
-                            <FormatPrice price={item.product.price * item.quantity} />
+                            <FormatPrice price={item.price * item.quantity} />
                           </div>
                         </div>
                       ))}

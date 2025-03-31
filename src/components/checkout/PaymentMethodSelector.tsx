@@ -11,7 +11,12 @@ import {
   Phone
 } from 'lucide-react';
 
-export function PaymentMethodSelector({ value, onChange }: { value: string, onChange: (value: string) => void }) {
+interface PaymentMethodSelectorProps {
+  value: string;
+  onChange: (value: string) => void;
+}
+
+export function PaymentMethodSelector({ value, onChange }: PaymentMethodSelectorProps) {
   return (
     <RadioGroup value={value} onValueChange={onChange} className="grid grid-cols-1 md:grid-cols-2 gap-4">
       <div>

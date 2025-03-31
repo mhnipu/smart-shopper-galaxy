@@ -95,7 +95,7 @@ export const SmartSearch: React.FC<SmartSearchProps> = ({ open, onOpenChange }) 
                     <div className="flex items-center">
                       <div className="w-8 h-8 rounded overflow-hidden mr-2">
                         <img 
-                          src={product.thumbnail} 
+                          src={product.images[0]} 
                           alt={product.name} 
                           className="w-full h-full object-cover"
                         />

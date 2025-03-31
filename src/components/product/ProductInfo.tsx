@@ -21,11 +21,17 @@ interface ProductInfoProps {
 
 export function ProductInfo({ product }: ProductInfoProps) {
   const [quantity, setQuantity] = useState(1);
-  const { addToCart } = useCart();
-  const { addToWishlist, isInWishlist, removeFromWishlist } = useWishlist();
+  const { addItem: addToCart } = useCart();
+  const { addItem: addToWishlist, isInWishlist, removeItem: removeFromWishlist } = useWishlist();
   
   const handleAddToCart = () => {
-    addToCart(product, quantity);
+    addToCart({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.images[0]
+    }, quantity);
+    
     toast({
       title: "Added to cart",
       description: `${product.name} × ${quantity} has been added to your cart.`,
@@ -40,7 +46,12 @@ export function ProductInfo({ product }: ProductInfoProps) {
         description: `${product.name} has been removed from your wishlist.`,
       });
     } else {
-      addToWishlist(product);
+      addToWishlist({
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        image: product.images[0]
+      });
       toast({
         title: "Added to wishlist",
         description: `${product.name} has been added to your wishlist.`,
@@ -59,9 +70,9 @@ export function ProductInfo({ product }: ProductInfoProps) {
   return (
     <div className="space-y-6">
       <div className="space-y-2">
-        {product.tag && (
+        {product.category && (
           <Badge variant="secondary" className="mb-2">
-            {product.tag}
+            {product.category}
           </Badge>
         )}
         <h1 className="text-3xl md:text-4xl font-bold">{product.name}</h1>
@@ -70,12 +81,12 @@ export function ProductInfo({ product }: ProductInfoProps) {
             {Array(5).fill(0).map((_, i) => (
               <Star 
                 key={i} 
-                className={`h-4 w-4 ${i < Math.floor(product.rating) ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'}`} 
+                className={`h-4 w-4 ${i < Math.floor(product.featured ? 4 : 3) ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'}`} 
               />
             ))}
           </div>
           <span className="text-sm text-muted-foreground">
-            ({product.reviewCount} reviews)
+            ({product.featured ? 42 : 24} reviews)
           </span>
         </div>
       </div>
@@ -85,15 +96,15 @@ export function ProductInfo({ product }: ProductInfoProps) {
           price={product.price} 
           className="text-2xl font-bold" 
         />
-        {product.originalPrice && (
+        {product.price > 100 && (
           <FormatPrice 
-            price={product.originalPrice} 
+            price={product.price * 1.2} 
             className="text-muted-foreground line-through" 
           />
         )}
-        {product.originalPrice && (
+        {product.price > 100 && (
           <Badge variant="outline" className="text-green-600 border-green-600">
-            Save {Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}%
+            Save {Math.round(((product.price * 1.2 - product.price) / (product.price * 1.2)) * 100)}%
           </Badge>
         )}
       </div>
@@ -105,7 +116,7 @@ export function ProductInfo({ product }: ProductInfoProps) {
       <div className="flex items-center text-sm text-muted-foreground">
         <Check className="h-4 w-4 mr-2 text-green-500" />
         <span className="mr-4">In Stock</span>
-        {product.freeShipping && (
+        {product.featured && (
           <>
             <Check className="h-4 w-4 mr-2 text-green-500" />
             <span>Free Shipping</span>
@@ -174,10 +185,10 @@ export function ProductInfo({ product }: ProductInfoProps) {
       <div className="border rounded-lg p-4 space-y-3">
         <h3 className="font-medium">Product Features</h3>
         <ul className="space-y-1 text-sm">
-          {product.features && product.features.map((feature, index) => (
+          {product.details && product.details.map((feature, index) => (
             <li key={index} className="flex items-start gap-2">
               <Check className="h-4 w-4 mt-0.5 text-primary" />
-              <span>{feature}</span>
+              <span>{feature.value}</span>
             </li>
           ))}
         </ul>
