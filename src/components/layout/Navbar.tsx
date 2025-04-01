@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -212,22 +211,9 @@ export function Navbar() {
               <NavbarSearchForm 
                 isFullWidth={true} 
                 autoFocus={true} 
-                onSubmit={(e, searchTerm) => {
-                  e.preventDefault();
-                  if (searchTerm?.trim()) {
-                    navigate(`/products?search=${encodeURIComponent(searchTerm.trim())}`);
-                    setIsSearchOpen(false);
-                  }
-                }} 
+                onSubmit={handleSearchSubmit}
+                onAdvancedSearch={handleAdvancedSearch}
               />
-              <div className="flex justify-end">
-                <Button variant="link" size="sm" onClick={() => {
-                  setIsSearchOpen(false);
-                  setIsSmartSearchOpen(true);
-                }}>
-                  Advanced Search
-                </Button>
-              </div>
             </div>
           </div>
         </div>
