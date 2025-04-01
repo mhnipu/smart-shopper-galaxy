@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
 
 export function Hero() {
   const slides = [
@@ -10,36 +10,61 @@ export function Hero() {
       image: 'https://images.unsplash.com/photo-1616763355548-1b606f439f86?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3',
       title: 'Next-Gen Technology',
       subtitle: 'Discover the latest innovations in tech at unbeatable prices',
+      description: 'Explore cutting-edge devices that seamlessly integrate into your lifestyle. Our expert-curated selection features the most innovative gadgets on the market.',
       buttonText: 'Shop Latest Tech',
-      buttonLink: '/products'
+      buttonLink: '/products',
+      secondaryButton: {
+        text: 'View Deals',
+        link: '/products?sale=true'
+      }
     },
     {
       image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3',
       title: 'Premium Audio',
       subtitle: 'Experience sound like never before with our high-quality headphones',
+      description: 'Immerse yourself in crystal-clear audio with our premium headphone collection. From noise-cancelling to audiophile-grade options, find your perfect sound companion.',
       buttonText: 'Shop Audio',
-      buttonLink: '/category/audio'
+      buttonLink: '/category/audio',
+      secondaryButton: {
+        text: 'Compare Models',
+        link: '/category/audio?compare=true'
+      }
     },
     {
       image: 'https://images.unsplash.com/photo-1515940625090-e199db0469de?q=80&w=2069&auto=format&fit=crop&ixlib=rb-4.0.3',
       title: 'Smart Home',
       subtitle: 'Transform your living space with intelligent home solutions',
+      description: 'Create the perfect connected home with our range of smart devices. Control lighting, security, entertainment, and more with intuitive technology.',
       buttonText: 'Explore Smart Home',
-      buttonLink: '/category/smart-home'
+      buttonLink: '/category/smart-home',
+      secondaryButton: {
+        text: 'Setup Guide',
+        link: '/guides/smart-home'
+      }
     },
     {
       image: 'https://images.unsplash.com/photo-1593642702821-c8da6771f0c6?q=80&w=2669&auto=format&fit=crop&ixlib=rb-4.0.3',
       title: 'Gaming Excellence',
       subtitle: 'Level up your gaming experience with cutting-edge laptops and accessories',
+      description: 'Dominate every game with our high-performance gaming equipment. From graphics-intensive laptops to precision peripherals, we have everything you need to win.',
       buttonText: 'Explore Gaming',
-      buttonLink: '/category/gaming'
+      buttonLink: '/category/gaming',
+      secondaryButton: {
+        text: 'Gaming Bundles',
+        link: '/bundles/gaming'
+      }
     },
     {
       image: 'https://images.unsplash.com/photo-1603891128711-11b4b03bb138?q=80&w=2669&auto=format&fit=crop&ixlib=rb-4.0.3',
       title: 'Smartphone Innovation',
       subtitle: 'Stay connected with the latest smartphone technology and accessories',
+      description: 'Discover phones with cutting-edge cameras, lightning-fast processors, and brilliant displays. Find the device that perfectly balances work and play.',
       buttonText: 'Shop Smartphones',
-      buttonLink: '/category/phones'
+      buttonLink: '/category/phones',
+      secondaryButton: {
+        text: 'Accessories',
+        link: '/category/phone-accessories'
+      }
     }
   ];
 
@@ -107,7 +132,7 @@ export function Hero() {
 
   return (
     <section 
-      className="relative h-[500px] md:h-[600px] lg:h-[700px] overflow-hidden mt-[180px] md:mt-[190px]"
+      className="relative h-[500px] md:h-[600px] lg:h-[700px] overflow-hidden"
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
@@ -118,25 +143,39 @@ export function Hero() {
             currentSlide === index ? 'opacity-100' : 'opacity-0'
           }`}
         >
-          <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-black/10 z-10" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/20 z-10" />
           <img
             src={slide.image}
             alt={slide.title}
             className="h-full w-full object-cover"
           />
           <div className="absolute inset-0 z-20 flex items-center justify-start text-left px-8 md:px-16">
-            <div className="max-w-lg animate-fade-in" style={{ animationDuration: '1s' }}>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 drop-shadow-md">
+            <div className="max-w-2xl animate-fade-in" style={{ animationDuration: '1s' }}>
+              <div className="inline-block px-3 py-1 rounded-full bg-primary/90 text-white text-xs font-medium mb-4">
+                New Collection
+              </div>
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-3 drop-shadow-md">
                 {slide.title}
               </h1>
-              <p className="text-sm md:text-base lg:text-lg text-white/90 mb-8 max-w-md drop-shadow-md">
+              <p className="text-sm md:text-base lg:text-lg text-white/90 mb-4 max-w-md drop-shadow-md font-medium">
                 {slide.subtitle}
               </p>
-              <Link to={slide.buttonLink}>
-                <Button size="lg" variant="default" className="shadow-lg">
-                  {slide.buttonText}
-                </Button>
-              </Link>
+              <p className="text-xs md:text-sm text-white/80 mb-6 max-w-lg drop-shadow-md hidden md:block">
+                {slide.description}
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Link to={slide.buttonLink}>
+                  <Button size="lg" variant="default" className="shadow-lg group">
+                    {slide.buttonText}
+                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  </Button>
+                </Link>
+                <Link to={slide.secondaryButton.link}>
+                  <Button size="lg" variant="outline" className="bg-white/10 backdrop-blur-sm border-white/20 text-white hover:bg-white/20">
+                    {slide.secondaryButton.text}
+                  </Button>
+                </Link>
+              </div>
             </div>
           </div>
         </div>
