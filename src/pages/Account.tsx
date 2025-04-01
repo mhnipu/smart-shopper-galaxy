@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { CartDrawer } from '@/components/cart/CartDrawer';
@@ -8,27 +8,60 @@ import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
   User, Package, Heart, CreditCard, LogOut, 
-  Edit2, Save, Loader2, AlertCircle, Mail, Lock, MapPin
+  Edit2, Save, Loader2, Mail, Lock, MapPin,
+  Shield, Bell, BarChart3, FileText, UserCheck
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { Switch } from '@/components/ui/switch';
+import { Progress } from '@/components/ui/progress';
+import { useAuth } from '@/context/AuthContext';
 
 const AccountPage = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
+  const location = useLocation();
+  const { user: authUser, isAuthenticated, logout } = useAuth();
+  const [activeTab, setActiveTab] = useState('profile');
+
+  // Parse URL params to get active tab
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const tabParam = searchParams.get('tab');
+    if (tabParam) {
+      setActiveTab(tabParam);
+    }
+  }, [location]);
+
+  // Redirect if not logged in
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate('/login?redirect=/account');
+    }
+  }, [isAuthenticated, navigate]);
 
   // Mock user data
   const [userData, setUserData] = useState({
-    name: 'John Doe',
-    email: 'john.doe@example.com',
+    name: authUser?.name || 'John Doe',
+    email: authUser?.email || 'john.doe@example.com',
     phone: '+1 (555) 123-4567',
     address: '123 Main Street, Apt 4B',
     city: 'New York',
     state: 'NY',
     zip: '10001',
     country: 'United States'
+  });
+
+  // User preferences
+  const [preferences, setPreferences] = useState({
+    emailNotifications: true,
+    smsNotifications: false,
+    twoFactorAuth: false,
+    darkMode: false,
+    newsletterSubscribed: true,
+    activityAlerts: true
   });
 
   // Mock order data
@@ -44,9 +77,18 @@ const AccountPage = () => {
     { id: 'p2', name: 'Smart Watch Pro', price: 299.99, image: 'https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3' },
   ];
 
+  // Track loyalty points
+  const [loyaltyPoints, setLoyaltyPoints] = useState(250);
+  const nextRewardAt = 500;
+  const progressPercentage = (loyaltyPoints / nextRewardAt) * 100;
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setUserData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleToggleChange = (name: string) => {
+    setPreferences(prev => ({ ...prev, [name]: !prev[name] }));
   };
 
   const handleSaveProfile = () => {
@@ -59,6 +101,8 @@ const AccountPage = () => {
         title: "Profile updated",
         description: "Your profile information has been updated successfully."
       });
+      // Give loyalty points for profile update
+      setLoyaltyPoints(prev => prev + 10);
     }, 1000);
   };
 
@@ -68,6 +112,7 @@ const AccountPage = () => {
       title: "Logged out",
       description: "You have been logged out successfully."
     });
+    logout();
     navigate('/');
   };
 
@@ -76,7 +121,7 @@ const AccountPage = () => {
       <Navbar />
       <CartDrawer />
       
-      <main className="flex-1 pt-16">
+      <main className="flex-1 pt-20"> {/* Fixed the top spacing */}
         {/* Account Header */}
         <div className="bg-muted py-12 px-4 md:px-6 lg:px-8">
           <div className="container mx-auto">
@@ -90,9 +135,24 @@ const AccountPage = () => {
         {/* Account Content */}
         <div className="py-12 px-4 md:px-6 lg:px-8">
           <div className="container mx-auto">
-            <Tabs defaultValue="profile" className="space-y-6">
+            <Tabs defaultValue={activeTab} value={activeTab} onValueChange={setActiveTab} className="space-y-6">
               <div className="flex flex-col md:flex-row gap-6">
                 <div className="md:w-64 space-y-1 flex-shrink-0">
+                  {/* Loyalty Card */}
+                  <div className="mb-6 p-4 bg-primary/10 rounded-lg border border-primary/20">
+                    <h3 className="font-medium text-primary mb-2">Loyalty Program</h3>
+                    <div className="mb-2">
+                      <div className="flex justify-between text-sm mb-1">
+                        <span>{loyaltyPoints} points</span>
+                        <span>{nextRewardAt} points</span>
+                      </div>
+                      <Progress value={progressPercentage} className="h-2" />
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      {nextRewardAt - loyaltyPoints} more points until your next reward!
+                    </p>
+                  </div>
+                  
                   <TabsList className="flex flex-col h-auto w-full bg-transparent space-y-1">
                     <TabsTrigger value="profile" className="w-full justify-start px-3 h-10">
                       <User className="h-4 w-4 mr-2" />
@@ -109,6 +169,18 @@ const AccountPage = () => {
                     <TabsTrigger value="payment" className="w-full justify-start px-3 h-10">
                       <CreditCard className="h-4 w-4 mr-2" />
                       Payment Methods
+                    </TabsTrigger>
+                    <TabsTrigger value="security" className="w-full justify-start px-3 h-10">
+                      <Shield className="h-4 w-4 mr-2" />
+                      Security
+                    </TabsTrigger>
+                    <TabsTrigger value="preferences" className="w-full justify-start px-3 h-10">
+                      <Bell className="h-4 w-4 mr-2" />
+                      Preferences
+                    </TabsTrigger>
+                    <TabsTrigger value="activity" className="w-full justify-start px-3 h-10">
+                      <BarChart3 className="h-4 w-4 mr-2" />
+                      Activity
                     </TabsTrigger>
                     <Button 
                       variant="ghost" 
@@ -383,6 +455,143 @@ const AccountPage = () => {
                         You don't have any saved payment methods yet. Add one for faster checkout.
                       </p>
                       <Button>Add Payment Method</Button>
+                    </div>
+                  </TabsContent>
+                  
+                  {/* Security Tab - New */}
+                  <TabsContent value="security" className="space-y-6 mt-0">
+                    <h2 className="text-2xl font-semibold">Security Settings</h2>
+                    <div className="space-y-6 border rounded-lg p-6">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <h3 className="font-medium">Two-Factor Authentication</h3>
+                          <p className="text-muted-foreground text-sm">Add an extra layer of security to your account</p>
+                        </div>
+                        <Switch 
+                          checked={preferences.twoFactorAuth}
+                          onCheckedChange={() => handleToggleChange('twoFactorAuth')}
+                        />
+                      </div>
+                      <div className="border-t pt-6">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <h3 className="font-medium">Password</h3>
+                            <p className="text-muted-foreground text-sm">Last changed 3 months ago</p>
+                          </div>
+                          <Button variant="outline" size="sm">Change Password</Button>
+                        </div>
+                      </div>
+                      <div className="border-t pt-6">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <h3 className="font-medium">Login Sessions</h3>
+                            <p className="text-muted-foreground text-sm">Manage devices that are logged in</p>
+                          </div>
+                          <Button variant="outline" size="sm">View Sessions</Button>
+                        </div>
+                      </div>
+                    </div>
+                  </TabsContent>
+                  
+                  {/* Preferences Tab - New */}
+                  <TabsContent value="preferences" className="space-y-6 mt-0">
+                    <h2 className="text-2xl font-semibold">Notification Preferences</h2>
+                    <div className="space-y-4 border rounded-lg p-6">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <h3 className="font-medium">Email Notifications</h3>
+                          <p className="text-muted-foreground text-sm">Receive order updates via email</p>
+                        </div>
+                        <Switch 
+                          checked={preferences.emailNotifications}
+                          onCheckedChange={() => handleToggleChange('emailNotifications')}
+                        />
+                      </div>
+                      <div className="border-t pt-4">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <h3 className="font-medium">SMS Notifications</h3>
+                            <p className="text-muted-foreground text-sm">Receive order updates via text message</p>
+                          </div>
+                          <Switch 
+                            checked={preferences.smsNotifications}
+                            onCheckedChange={() => handleToggleChange('smsNotifications')}
+                          />
+                        </div>
+                      </div>
+                      <div className="border-t pt-4">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <h3 className="font-medium">Newsletter Subscription</h3>
+                            <p className="text-muted-foreground text-sm">Receive our weekly newsletter</p>
+                          </div>
+                          <Switch 
+                            checked={preferences.newsletterSubscribed}
+                            onCheckedChange={() => handleToggleChange('newsletterSubscribed')}
+                          />
+                        </div>
+                      </div>
+                      <div className="border-t pt-4">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <h3 className="font-medium">Activity Alerts</h3>
+                            <p className="text-muted-foreground text-sm">Get notified about account activity</p>
+                          </div>
+                          <Switch 
+                            checked={preferences.activityAlerts}
+                            onCheckedChange={() => handleToggleChange('activityAlerts')}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </TabsContent>
+                  
+                  {/* Activity Tab - New */}
+                  <TabsContent value="activity" className="space-y-6 mt-0">
+                    <div className="flex justify-between items-center">
+                      <h2 className="text-2xl font-semibold">Recent Activity</h2>
+                      <Button variant="outline" size="sm">
+                        <FileText className="h-4 w-4 mr-2" />
+                        Export Report
+                      </Button>
+                    </div>
+                    <div className="border rounded-lg divide-y">
+                      <div className="p-4 flex justify-between items-center">
+                        <div className="flex items-start gap-3">
+                          <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                            <UserCheck className="h-4 w-4 text-primary" />
+                          </div>
+                          <div>
+                            <p className="font-medium">Account Login</p>
+                            <p className="text-sm text-muted-foreground">Successful login from Chrome on Windows</p>
+                          </div>
+                        </div>
+                        <span className="text-sm text-muted-foreground">5 minutes ago</span>
+                      </div>
+                      <div className="p-4 flex justify-between items-center">
+                        <div className="flex items-start gap-3">
+                          <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                            <Heart className="h-4 w-4 text-primary" />
+                          </div>
+                          <div>
+                            <p className="font-medium">Item Added to Wishlist</p>
+                            <p className="text-sm text-muted-foreground">You added "Smart Watch Pro" to your wishlist</p>
+                          </div>
+                        </div>
+                        <span className="text-sm text-muted-foreground">2 hours ago</span>
+                      </div>
+                      <div className="p-4 flex justify-between items-center">
+                        <div className="flex items-start gap-3">
+                          <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                            <Package className="h-4 w-4 text-primary" />
+                          </div>
+                          <div>
+                            <p className="font-medium">Order Status Update</p>
+                            <p className="text-sm text-muted-foreground">Order #ORD-5678 is now processing</p>
+                          </div>
+                        </div>
+                        <span className="text-sm text-muted-foreground">1 day ago</span>
+                      </div>
                     </div>
                   </TabsContent>
                 </div>

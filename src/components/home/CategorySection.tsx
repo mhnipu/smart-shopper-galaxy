@@ -45,7 +45,7 @@ export function CategorySection({ categories }: CategorySectionProps) {
                   {category.name}
                 </h3>
                 <p className="text-muted-foreground text-sm mt-1">
-                  {category.description?.substring(0, 50) || `Explore our ${category.name} collection`}
+                  {`Explore our ${category.name} collection`}
                 </p>
               </div>
             </Link>

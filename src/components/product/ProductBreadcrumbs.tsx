@@ -9,6 +9,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
+import { ChevronRight } from 'lucide-react';
 
 interface ProductBreadcrumbsProps {
   productName: string;
@@ -23,24 +24,30 @@ export function ProductBreadcrumbs({ productName, category }: ProductBreadcrumbs
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink asChild>
-                <Link to="/">Home</Link>
+                <Link to="/" className="flex items-center hover:text-primary transition-colors">Home</Link>
               </BreadcrumbLink>
             </BreadcrumbItem>
-            <BreadcrumbSeparator />
+            <BreadcrumbSeparator>
+              <ChevronRight className="h-4 w-4" />
+            </BreadcrumbSeparator>
             <BreadcrumbItem>
               <BreadcrumbLink asChild>
-                <Link to="/products">Products</Link>
+                <Link to="/products" className="hover:text-primary transition-colors">Products</Link>
               </BreadcrumbLink>
             </BreadcrumbItem>
-            <BreadcrumbSeparator />
+            <BreadcrumbSeparator>
+              <ChevronRight className="h-4 w-4" />
+            </BreadcrumbSeparator>
             <BreadcrumbItem>
               <BreadcrumbLink asChild>
-                <Link to={`/category/${category}`} className="capitalize">
+                <Link to={`/category/${category}`} className="capitalize hover:text-primary transition-colors">
                   {category.replace('-', ' ')}
                 </Link>
               </BreadcrumbLink>
             </BreadcrumbItem>
-            <BreadcrumbSeparator />
+            <BreadcrumbSeparator>
+              <ChevronRight className="h-4 w-4" />
+            </BreadcrumbSeparator>
             <BreadcrumbItem>
               <BreadcrumbPage className="truncate max-w-[200px] md:max-w-[300px]">
                 {productName}
