@@ -1,7 +1,8 @@
 
-import React from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 export function Hero() {
   const slides = [
@@ -42,17 +43,74 @@ export function Hero() {
     }
   ];
 
-  const [currentSlide, setCurrentSlide] = React.useState(0);
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [touchStart, setTouchStart] = useState(0);
+  const [progressWidth, setProgressWidth] = useState(0);
+  const slideInterval = 6000; // 6 seconds per slide
 
-  React.useEffect(() => {
+  const goToSlide = useCallback((index: number) => {
+    if (isAnimating) return;
+    
+    setIsAnimating(true);
+    setCurrentSlide(index);
+    setTimeout(() => {
+      setIsAnimating(false);
+    }, 1000);
+  }, [isAnimating]);
+
+  const prevSlide = useCallback(() => {
+    goToSlide((currentSlide - 1 + slides.length) % slides.length);
+  }, [currentSlide, slides.length, goToSlide]);
+
+  const nextSlide = useCallback(() => {
+    goToSlide((currentSlide + 1) % slides.length);
+  }, [currentSlide, slides.length, goToSlide]);
+
+  useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 5000);
+      nextSlide();
+    }, slideInterval);
     return () => clearInterval(interval);
-  }, [slides.length]);
+  }, [nextSlide]);
+
+  useEffect(() => {
+    // Progress bar animation
+    const interval = setInterval(() => {
+      setProgressWidth(prev => {
+        const newWidth = prev + (100 / (slideInterval / 100));
+        return newWidth > 100 ? 0 : newWidth;
+      });
+    }, 100);
+    
+    return () => clearInterval(interval);
+  }, [currentSlide]);
+
+  useEffect(() => {
+    setProgressWidth(0);
+  }, [currentSlide]);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.touches[0].clientX);
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    const touchEnd = e.changedTouches[0].clientX;
+    const difference = touchStart - touchEnd;
+    
+    if (difference > 50) {
+      nextSlide();
+    } else if (difference < -50) {
+      prevSlide();
+    }
+  };
 
   return (
-    <section className="relative h-[400px] md:h-[500px] lg:h-[600px] overflow-hidden mt-[180px] md:mt-[190px]">
+    <section 
+      className="relative h-[500px] md:h-[600px] lg:h-[700px] overflow-hidden mt-[180px] md:mt-[190px]"
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+    >
       {slides.map((slide, index) => (
         <div
           key={index}
@@ -60,22 +118,22 @@ export function Hero() {
             currentSlide === index ? 'opacity-100' : 'opacity-0'
           }`}
         >
-          <div className="absolute inset-0 bg-black/40 z-10" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-black/10 z-10" />
           <img
             src={slide.image}
             alt={slide.title}
             className="h-full w-full object-cover"
           />
           <div className="absolute inset-0 z-20 flex items-center justify-start text-left px-8 md:px-16">
-            <div className="max-w-lg">
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
+            <div className="max-w-lg animate-fade-in" style={{ animationDuration: '1s' }}>
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 drop-shadow-md">
                 {slide.title}
               </h1>
-              <p className="text-sm md:text-base text-white/90 mb-6 max-w-md">
+              <p className="text-sm md:text-base lg:text-lg text-white/90 mb-8 max-w-md drop-shadow-md">
                 {slide.subtitle}
               </p>
               <Link to={slide.buttonLink}>
-                <Button size="lg" variant="default">
+                <Button size="lg" variant="default" className="shadow-lg">
                   {slide.buttonText}
                 </Button>
               </Link>
@@ -88,7 +146,7 @@ export function Hero() {
         {slides.map((_, index) => (
           <button
             key={index}
-            onClick={() => setCurrentSlide(index)}
+            onClick={() => goToSlide(index)}
             className={`w-3 h-3 rounded-full transition-all ${
               currentSlide === index ? 'bg-white scale-125' : 'bg-white/50'
             }`}
@@ -96,6 +154,31 @@ export function Hero() {
           />
         ))}
       </div>
+      
+      {/* Progress bar */}
+      <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/20 z-20">
+        <div 
+          className="h-full bg-primary transition-all duration-100 ease-linear"
+          style={{ width: `${progressWidth}%` }}
+        ></div>
+      </div>
+      
+      {/* Navigation buttons */}
+      <button 
+        onClick={prevSlide} 
+        className="absolute left-4 top-1/2 z-20 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white rounded-full p-2 transition-all"
+        aria-label="Previous slide"
+      >
+        <ChevronLeft className="h-6 w-6" />
+      </button>
+      
+      <button 
+        onClick={nextSlide} 
+        className="absolute right-4 top-1/2 z-20 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white rounded-full p-2 transition-all"
+        aria-label="Next slide"
+      >
+        <ChevronRight className="h-6 w-6" />
+      </button>
     </section>
   );
 }
