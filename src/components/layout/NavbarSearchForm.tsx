@@ -1,10 +1,11 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, Camera, Mic, X } from 'lucide-react';
+import { Search, X } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { products, categories } from '@/lib/data';
+import { useProducts, useSearchProducts } from '@/hooks/useProducts';
+import { useCategories } from '@/hooks/useCategories';
 import { 
   Popover,
   PopoverContent,
@@ -30,6 +31,9 @@ export function NavbarSearchForm({
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
   const inputRef = useRef<HTMLInputElement>(null);
+  
+  const { data: categories } = useCategories();
+  const { data: searchResults } = useSearchProducts(searchQuery);
   
   useEffect(() => {
     if (searchQuery.trim().length > 0) {
@@ -68,18 +72,10 @@ export function NavbarSearchForm({
     inputRef.current?.focus();
   };
 
-  const productResults = products
-    .filter(product => 
-      product.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-      product.description.toLowerCase().includes(searchQuery.toLowerCase())
-    )
-    .slice(0, 5);
-
-  const categoryResults = categories
-    .filter(category => 
-      category.name.toLowerCase().includes(searchQuery.toLowerCase())
-    )
-    .slice(0, 3);
+  const productResults = searchResults?.slice(0, 5) || [];
+  const categoryResults = categories?.filter(category => 
+    category.name.toLowerCase().includes(searchQuery.toLowerCase())
+  ).slice(0, 3) || [];
 
   return (
     <Popover open={isOpen && searchQuery.trim().length > 0} onOpenChange={setIsOpen}>
@@ -191,14 +187,14 @@ export function NavbarSearchForm({
               <Badge variant="outline" className="text-xs cursor-pointer" onClick={() => navigate('/products')}>
                 All Products
               </Badge>
-              {['Audio', 'Phones', 'Gaming'].map((cat) => (
+              {categories?.slice(0, 3).map((cat) => (
                 <Badge 
-                  key={cat} 
+                  key={cat.id} 
                   variant="outline" 
                   className="text-xs cursor-pointer"
-                  onClick={() => navigate(`/category/${cat.toLowerCase()}`)}
+                  onClick={() => navigate(`/category/${cat.id}`)}
                 >
-                  {cat}
+                  {cat.name}
                 </Badge>
               ))}
             </div>

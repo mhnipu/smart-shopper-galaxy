@@ -18,54 +18,37 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { useCategories } from '@/hooks/useCategories';
 
 export function NavbarCategories() {
   const navigate = useNavigate();
   const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
+  const { data: categories } = useCategories();
   
-  const categories = [
+  const categoryIcons: { [key: string]: JSX.Element } = {
+    'audio': <Headphones className="h-5 w-5" />,
+    'wearables': <Watch className="h-5 w-5" />,
+    'phones': <Smartphone className="h-5 w-5" />,
+    'photography': <Camera className="h-5 w-5" />,
+    'gaming': <Gamepad className="h-5 w-5" />,
+    'smart-home': <Monitor className="h-5 w-5" />,
+    'computers': <Laptop className="h-5 w-5" />,
+    'accessories': <Monitor className="h-5 w-5" />
+  };
+  
+  const allCategories = [
     {
       id: 'all',
       name: 'All Products',
       icon: <Laptop className="h-5 w-5" />,
       href: '/products'
     },
-    {
-      id: 'audio',
-      name: 'Audio',
-      icon: <Headphones className="h-5 w-5" />,
-      href: '/category/audio'
-    },
-    {
-      id: 'wearables',
-      name: 'Wearables',
-      icon: <Watch className="h-5 w-5" />,
-      href: '/category/wearables'
-    },
-    {
-      id: 'phones',
-      name: 'Phones',
-      icon: <Smartphone className="h-5 w-5" />,
-      href: '/category/phones'
-    },
-    {
-      id: 'cameras',
-      name: 'Cameras',
-      icon: <Camera className="h-5 w-5" />,
-      href: '/category/cameras'
-    },
-    {
-      id: 'gaming',
-      name: 'Gaming',
-      icon: <Gamepad className="h-5 w-5" />,
-      href: '/category/gaming'
-    },
-    {
-      id: 'smart-home',
-      name: 'Smart Home',
-      icon: <Monitor className="h-5 w-5" />,
-      href: '/category/smart-home'
-    }
+    ...(categories || []).map(cat => ({
+      id: cat.id,
+      name: cat.name,
+      icon: categoryIcons[cat.id] || <Monitor className="h-5 w-5" />,
+      href: `/category/${cat.id}`
+    }))
   ];
   
   return (
@@ -80,7 +63,7 @@ export function NavbarCategories() {
           </button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start" className="w-56 p-2">
-          {categories.map((category) => (
+          {allCategories.map((category) => (
             <DropdownMenuItem 
               key={category.id}
               className="flex items-center gap-3 py-2.5 cursor-pointer"
@@ -100,7 +83,7 @@ export function NavbarCategories() {
 
       {/* Individual category buttons - visible on larger screens */}
       <div className="hidden xl:flex gap-1 ml-2">
-        {categories.slice(1, 5).map((category) => (
+        {allCategories.slice(1, 5).map((category) => (
           <Link
             key={category.id}
             to={category.href}
@@ -117,7 +100,7 @@ export function NavbarCategories() {
         ))}
         
         {/* More categories dropdown for remaining categories */}
-        {categories.length > 5 && (
+        {allCategories.length > 5 && (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button className="flex items-center gap-2 px-3 py-2 rounded-full transition-colors hover:bg-muted">
@@ -126,7 +109,7 @@ export function NavbarCategories() {
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-48 p-2">
-              {categories.slice(5).map((category) => (
+              {allCategories.slice(5).map((category) => (
                 <DropdownMenuItem 
                   key={category.id}
                   className="flex items-center gap-2 py-2 cursor-pointer"

@@ -1,18 +1,15 @@
 
-import React, { useState, useEffect } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useParams, Link } from 'react-router-dom';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { CartDrawer } from '@/components/cart/CartDrawer';
-import { products } from '@/lib/data';
 import { Button } from '@/components/ui/button';
 import { Clock, Loader2, ShieldCheck, Truck } from 'lucide-react';
 import { ProductImageGallery } from '@/components/product/ProductImageGallery';
 import { ProductInfo } from '@/components/product/ProductInfo';
-import { ProductSpecifications } from '@/components/product/ProductSpecifications';
 import { RelatedProducts } from '@/components/product/RelatedProducts';
 import { ProductBreadcrumbs } from '@/components/product/ProductBreadcrumbs';
-import { ProductReviews } from '@/components/product/ProductReviews';
 import { ProductTabs } from '@/components/product/ProductTabs';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
@@ -21,18 +18,16 @@ import {
   CardContent
 } from '@/components/ui/card';
 import { SmartSearch } from '@/components/search/SmartSearch';
+import { useProduct, useProductsByCategory } from '@/hooks/useProducts';
 
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
-  const [product, setProduct] = useState(products.find(p => p.id === id));
-  const [loading, setLoading] = useState(true);
+  const { data: product, isLoading, error } = useProduct(id || '');
+  const { data: relatedProducts } = useProductsByCategory(product?.category || '');
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const navigate = useNavigate();
   
-  // Get related products (same category)
-  const relatedProducts = product 
-    ? products.filter(p => p.category === product.category && p.id !== product.id).slice(0, 4)
-    : [];
+  // Filter out current product from related products
+  const filteredRelatedProducts = relatedProducts?.filter(p => p.id !== product?.id).slice(0, 4) || [];
 
   // Sample reviews data
   const sampleReviews = [
@@ -62,18 +57,7 @@ const ProductDetail = () => {
     }
   ];
 
-  useEffect(() => {
-    // Simulate loading
-    setLoading(true);
-    setTimeout(() => {
-      setProduct(products.find(p => p.id === id));
-      setLoading(false);
-      // Scroll to top when product changes
-      window.scrollTo(0, 0);
-    }, 500);
-  }, [id]);
-
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="flex min-h-screen flex-col">
         <Navbar />
@@ -88,7 +72,7 @@ const ProductDetail = () => {
     );
   }
 
-  if (!product) {
+  if (error || !product) {
     return (
       <div className="flex min-h-screen flex-col">
         <Navbar />
@@ -177,7 +161,7 @@ const ProductDetail = () => {
           <Separator className="my-10" />
           
           {/* Related Products */}
-          <RelatedProducts products={relatedProducts} />
+          <RelatedProducts products={filteredRelatedProducts} />
         </div>
       </main>
       
