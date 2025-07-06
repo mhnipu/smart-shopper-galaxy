@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" fill="none">
+  <rect width="1200" height="630" fill="#4F46E5"/>
+  <path d="M340 344C328.954 344 320 352.954 320 364C320 375.046 328.954 384 340 384C351.046 384 360 375.046 360 364C360 352.954 351.046 344 340 344ZM540 344C528.954 344 520 352.954 520 364C520 375.046 528.954 384 540 384C551.046 384 560 375.046 560 364C560 352.954 551.046 344 540 344ZM280 164H600L580 304H300L280 164ZM240 124L270 344H550L580 124H240Z" fill="white"/>
+  <text x="600" y="460" font-family="Arial" font-size="64" text-anchor="middle" fill="white" font-weight="bold">Smart Shopper Galaxy</text>
+  <text x="600" y="520" font-family="Arial" font-size="36" text-anchor="middle" fill="white">Your Online Shopping Destination</text>
+</svg> 
